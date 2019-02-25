@@ -1,0 +1,83 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<section class="panel">
+    <header class="panel-heading">
+        <h4>解封列表</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" action="{:url('goodsorders/index')}">
+            <div class="form-group">
+                <div class="col-xs-3">
+                    <input type="text" value="" name="search" class="form-control"
+                           placeholder="请输入搜索内容">
+                </div>
+
+                <div class="col-xs-2 no-pd-r">
+                    <select name="type" class="form-control">
+                        <option {if $Request.get.type == 'mobile'} selected {/if}   value="mobile">电话号码</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-color">搜索</button>
+            </div>
+        </form>
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">用户账户</th>
+                <th class="text-center">时间</th>
+                <th class="text-center">状态</th>
+                <!-- 1:申请中 2:成功 3:失败  -->
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if !empty($lists)}
+            {foreach $lists as $entity}
+            <tr>
+                <td class="text-center">{$entity->id}</td>
+                <td class="text-center">{$entity->mobile}</td>
+                <td class="text-center">{$entity->create_time}</td>
+                <td class="text-center">
+                    {if $entity->status == 1}<span class="btn btn-xs btn-default">申请中</span>
+                    {elseif $entity->status == 2}<span class="btn btn-xs btn-success">通过</span>
+                    {elseif $entity->status == 3}<span class="btn btn-xs btn-danger">拒绝</span>
+                    {/if}
+                </td>
+
+                <td class="text-center">
+                    <a data-url="{:url('user/unsealing_yes',['id'=>$entity->id])}" onclick="main.ajaxDelete(this)" data-msg="确定要通过申请吗？" class="btn btn-xs btn-info">通过</a>
+                    <a data-url="{:url('user/unsealing_no',['id'=>$entity->id])}" onclick="main.ajaxDelete(this)" data-msg="确定要拒绝申请吗？" class="btn btn-xs btn-danger">拒绝</a>
+                </td>
+            </tr>
+            {/foreach}
+            {else /}
+            <tr class="text-center">
+                <td colspan="5">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        <div class="page">
+            {:htmlspecialchars_decode($lists->render())}
+        </div>
+    </div>
+</section>
+{/block}
+
+
+{block name="footer"}
+<script>
+    function showContent(e){
+        $.dialog({
+            title: '凭证图片',
+            content: $(e).attr('data-content')
+        });
+    }
+</script>
+{/block}

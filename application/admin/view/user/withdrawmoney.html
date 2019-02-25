@@ -1,0 +1,87 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<section class="panel">
+    <header class="panel-heading">
+        <h4>申述列表</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" action="">
+            <div class="form-group">
+                <div class="col-xs-2 no-pd-r">
+                    <select name="types" id="types" class="form-control">
+                        <option value="0">会员账号</option>
+                    </select>
+                </div>
+                <div class="col-xs-3 no-pd-l">
+                    <input type="text" id="keyword" value="{$Request.get.keyword}" name="keyword" class="form-control" placeholder="请输入会员账号搜索">
+                </div>
+                <button type="submit" class="btn btn-color">搜索</button>
+            </div>
+        </form>
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">用户账户</th>
+                <th class="text-center">凭证图片</th>
+                <th class="text-center">数量</th>
+                <th class="text-center">时间</th>
+                <th class="text-center">状态</th>
+                <!-- 1:申请中 2:成功 3:失败  -->
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if !empty($lists)}
+            {foreach $lists as $entity}
+            <tr>
+                <td class="text-center">{$entity->message_id}</td>
+                <td class="text-center">{$entity->mobile}</td>
+                <td class="text-center">
+                    <a onclick="showContent(this)" data-content="<img src='{$entity->img}'>" class="btn btn-xs btn-primary">查看</a>
+                </td>
+                <td class="text-center">{$entity->market_num}</td>
+                <td class="text-center">{$entity->create_time}</td>
+                <td class="text-center">
+                    {if $entity->status == 1}<span class="btn btn-xs btn-default">申请中</span>
+                    {elseif $entity->status == 2}<span class="btn btn-xs btn-success">通过</span>
+                    {elseif $entity->status == 3}<span class="btn btn-xs btn-danger">拒绝</span>
+                    {/if}
+                </td>
+
+                <td class="text-center">
+                    <a data-url="{:url('user/withdrawmoney_yes',['id'=>$entity->market_id,'message_id'=>$entity->message_id])}" onclick="main.ajaxDelete(this)" data-msg="确定要通过申请吗？" class="btn btn-xs btn-info">通过</a>
+                    <a data-url="{:url('user/withdrawmoney_no',['id'=>$entity->market_id,'message_id'=>$entity->message_id])}" onclick="main.ajaxDelete(this)" data-msg="确定要拒绝申请吗？" class="btn btn-xs btn-danger">拒绝</a>
+                </td>
+            </tr>
+            {/foreach}
+            {else /}
+            <tr class="text-center">
+                <td colspan="5">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        <div class="page">
+            {:htmlspecialchars_decode($lists->render())}
+        </div>
+    </div>
+</section>
+{/block}
+
+
+{block name="footer"}
+    <script>
+        function showContent(e){
+            $.dialog({
+                title: '凭证图片',
+                content: $(e).attr('data-content')
+            });
+        }
+    </script>
+{/block}

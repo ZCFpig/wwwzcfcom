@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>公告详情</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem .373333rem .373333rem;}
+        .content-box {margin-top: .373333rem;padding: .4rem .533333rem;width: 100%;border-radius: .266667rem;background: #fff;}
+        .notice-title {min-height: .64rem;line-height: .64rem;font-size: .373333rem;color: #333;}
+        .time {min-height: .586667rem;line-height: .586667rem;font-size: .32rem;color: #999;}
+        .content {margin-top: .32rem;font-size: .373333rem;color: #333;line-height: .48rem}
+        .content img {display: block;max-width: 80%;margin: 0 auto;}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>公告详情</span>
+    </header>
+    <main class="main">
+        <div class="content-box">
+            <div class="notice-title"></div>
+            <div class="time"></div>
+            <div class="content"></div>
+        </div>
+    </main>
+</body>
+<script>
+    /*let noticeTitle = document.querySelector('.notice-title');
+    let time = document.querySelector('.time');
+    let content = document.querySelector('.content');
+    // 获取url中的参数
+    function GetQueryString(name) {
+        let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        let r = window.location.search.substr(1).match(reg);
+        if (r !=null ) return unescape(r[2]); return null;
+    }
+    let urlParameter = GetQueryString("article_id");
+    $.ajax({
+        url: j_url + "/index/article/artInfo",
+        type: "GET",
+        data: {article_id: urlParameter},
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                let info = res.info;
+                noticeTitle.innerHTML = info.title;
+                time.innerHTML = info.create_time;
+                content.innerHTML = info.content;
+            };
+        }
+    });*/
+    'use strict';
+    var noticeTitle = document.querySelector('.notice-title');
+    var time = document.querySelector('.time');
+    var content = document.querySelector('.content');
+    // 获取url中的参数
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);return null;
+    }
+    var urlParameter = GetQueryString("article_id");
+    $.ajax({
+        url: j_url + "/index/article/artInfo",
+        type: "GET",
+        data: { article_id: urlParameter },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                noticeTitle.innerHTML = info.title;
+                time.innerHTML = info.create_time;
+                content.innerHTML = info.content;
+            };
+        }
+    });
+</script>
+</html>

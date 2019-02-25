@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>首页</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #fff;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;width: 100%;height: 1.28rem;line-height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;font-weight: bold;}
+        .main {padding: 1.28rem 0rem 1.333333rem;}
+        .main-top {padding: .373333rem;background: #f5f5f5;}
+        .banner {width: 100%;height: 3.36rem;border-radius: .266667rem;overflow: hidden;}
+        .banner img {width: 100%;height: 100%;vertical-align: bottom;}
+        .nav-box {margin-top: .373333rem;padding: .08rem .4rem .213333rem;display: flex;justify-content: space-between;border-radius: .266667rem;background: #fff;}
+        .nav-item {width: 28.7%;display: flex;justify-content: center;}
+        .nav-item:first-child {justify-content: flex-start;width: 21.3%;}
+        .nav-item:last-child {justify-content: flex-end;width: 21.3%;}
+        .nav-icon {text-align: center;}
+        .nav-icon img {width: 1.28rem;height: 1.28rem;}
+        .nav-name {font-size: .32rem;color: #333;text-align: center;height: .32rem;line-height: .32rem;}
+        .content-title {padding: .32rem .293333rem 0rem;display: flex;justify-content: flex-start;align-items: center;}
+        .content-title span {height: .533333rem;line-height: .533333rem;font-size: .426667rem;color: #333;}
+        .title-icon img {height: .533333rem;vertical-align: bottom;margin-right: .106667rem;}
+        .list {padding: .32rem .373333rem 0rem;display: flex;justify-content: flex-start;flex-wrap: wrap;}
+        .list-item {margin-right: 4.9%;margin-bottom: .373333rem;padding: .32rem .533333rem .266667rem;width: 47.55%;background: #fff;border-radius: .266667rem;box-shadow: 0rem 0rem .666667rem 0rem #ccc;}
+        .list-item:nth-child(2n) {margin-right: 0;}
+        .goods-img {text-align: center;}
+        .goods-img img {width: 3.333333rem;vertical-align: bottom;}
+        .goods-name, .goods-yield {height: .373333rem;line-height: .373333rem;font-size: .32rem;color: #333;text-align: center;}
+        .goods-price {display: flex;justify-content: center;align-items: center;min-height: .64rem;font-size: .32rem;color: #FF4F4F;}
+        .rent-box {display: flex;justify-content: center;margin-top: .053333rem;}
+        .rent-btn {display: flex;justify-content: center;align-items: center;padding: 0rem .4rem;min-height: .693333rem;width: 3.04rem;border: none;background: #2E80C5;border-radius: .133333rem;font-size: .373333rem;color: #fff;font-weight: bold;box-shadow: 0rem 0rem .24rem 0rem #2E80C5;}
+        .footer {position: fixed;bottom: 0;left: 0;display: flex;justify-content: space-between;padding-top: .16rem;width: 100%;height: 1.333333rem;background: #fff;border-top: 1px solid #E0E0E0;}
+        .footer-nav {width: 20%;display: flex;justify-content: center;}
+        .footer-icon {text-align: center;}
+        .footer-icon img {height: .533333rem;vertical-align: bottom;}
+        .footer-name {padding-top: .08rem;font-size: .32rem;color: #999;text-align: center;}
+        .footer-active .footer-name {color: #2E80C5;}
+        .popup-bg {position: fixed;top: 0;left: 0;z-index: 999999;width: 100%;height: 100%;background: rgba(0, 0, 0, .35);display: none;}
+        .popup-box {display: flex;justify-content: center;align-items: center;width: 100%;height: 100%;opacity: 0;transition: ease opacity .4s;}
+        .popup-content {width: 72.3%;border-radius: .4rem;background: rgba(255, 255, 255, .98);overflow: hidden;transform: scale(1.2);transition: ease transform .4s;}
+        .popup-tip {height: 2.56rem;display: flex;justify-content: center;align-items: center;font-size: .48rem;color: #333;border-bottom: 1px solid #E0E0E0;}
+        .popup-btn {display: block;width: 100%;height: 1.2rem;line-height: 1.2rem;text-align: center;font-size: .48rem;color: #2E80C5;border: none;background: transparent;}
+    </style>
+<body>
+    <header class="header">
+        <span>首页</span>
+    </header>
+    <main class="main">
+        <div class="main-top">
+            <div class="banner">
+                <!-- <img src="../static/images/banner_img@2x.png" alt=""> -->
+            </div>
+            <nav class="nav-box">
+                <div class="nav-item">
+                    <div class="sign-in">
+                        <div class="nav-icon">
+                            <img src="../static/images/home_Sign_in_icon@2x.png" alt="">
+                        </div>
+                        <div class="nav-name">我要签到</div>
+                    </div>
+                </div>
+                <div class="nav-item" onclick="window.location.href='news_bulletin.html'">
+                    <div>
+                        <div class="nav-icon">
+                            <img src="../static/images/hoem_announcement_icon@2x.png" alt="">
+                        </div>
+                        <div class="nav-name">新闻公告</div>
+                    </div>
+                </div>
+                <div class="nav-item" onclick="window.location.href='extension.html'">
+                    <div>
+                        <div class="nav-icon">
+                            <img src="../static/images/home_QR_code_icon@2x.png" alt="">
+                        </div>
+                        <div class="nav-name">推广二维码</div>
+                    </div>
+                </div>
+                <div class="nav-item" onclick="window.location.href='online_service.html'">
+                    <div>
+                        <div class="nav-icon">
+                            <img src="../static/images/home_Customer_service_icon@2x.png" alt="">
+                        </div>
+                        <div class="nav-name">在线客服</div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="content">
+            <div class="content-title">
+                <span class="title-icon"><img src="../static/images/home_title_icon@2x.png" alt=""></span>
+                <span>猪猪商城</span>
+            </div>
+            <div class="list">
+                <!-- <div class="list-item">
+                    <div class="goods-img">
+                        <img src="../static/images/home_One_icon@2x.png" alt="">
+                    </div>
+                    <div class="goods-name">微信云矿机</div>
+                    <div class="goods-yield">产量/小时：0.0033</div>
+                    <div class="goods-price">价格：10.00矿池包</div>
+                    <div class="rent-box">
+                        <button class="rent-btn">立即租用</button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-nav footer-active">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_home_Selected_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">首页</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='mining_machine.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_machine_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">农场</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='team.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_team_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">团队</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='transaction.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_cross_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">交易</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='center.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_mine_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">我的</div>
+            </div>
+        </div>
+    </footer>
+    <div class="popup-bg">
+        <div class="popup-box">
+            <div class="popup-content">
+                <div class="popup-tip"></div>
+                <button class="popup-btn">确定</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var banner = document.querySelector('.banner');
+    var signIn = $('.sign-in');
+    var popupBg = document.querySelector('.popup-bg');
+    var popupBox = document.querySelector('.popup-box');
+    var popupContent = document.querySelector('.popup-content');
+    var popupTip = document.querySelector('.popup-tip');
+    var popupBtn = $('.popup-btn');
+    var list = document.querySelector('.list');
+    signIn.on('click', function() {
+        $.ajax({
+            url: j_url + "/index/shop/everydaySign",
+            type: "POST",
+            data: {},
+            dataType: "json",
+            async: true,
+            crossDomain: true,
+            success: function(res) {
+                console.log(res);
+                popupTip.innerHTML = res.message;
+                popupBg.style.display = 'block';
+                setTimeout(function() {
+                    popupBox.style.opacity = '1';
+                    popupContent.style.transform = 'scale(1)';
+                }, 10)
+            }
+        });
+    });
+    popupBtn.on('click', function() {
+        popupBox.style.opacity = '0';
+        setTimeout(function() {
+            popupBg.style.display = 'none';
+            popupContent.style.transform = 'scale(1.2)';
+        }, 400);
+    });
+
+    $.ajax({
+        url: j_url + "/index/shop/packageIndex",
+        type: "POST",
+        data: {},
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                for (var i = 0; i < info.length; i++) {
+                    var item = info[i];
+                    var goodsName;
+                    switch (item.level) {
+                        case 1:
+                            goodsName = '小型农场';
+                            break;
+                        case 2:
+                            goodsName = '中型农场';
+                            break;
+                        case 3:
+                            goodsName = '大型农场';
+                            break;
+                        case 4:
+                            goodsName = '超级农场';
+                            break;
+                    }
+                    var html = '';
+                    html+='<div class="list-item">';
+                        html+='<div class="goods-img">';
+                            html+='<img src="../static/images/home_'+item.level+'_icon@2x.png" alt="">';
+                        html+='</div>';
+                        html+='<div class="goods-name">'+goodsName+'</div>';
+                        html+='<div class="goods-yield">产量/小时：'+Number(item.hour_num).toFixed(4)+'</div>';
+                        html+='<div class="goods-price">价格：'+Number(item.money).toFixed(2)+'矿池包</div>';
+                        html+='<div class="rent-box">';
+                            html+='<button class="rent-btn" onclick="rent('+item.level+')">立即租用</button>';
+                        html+='</div>';
+                    html+='</div>';
+
+                    list.innerHTML += html;
+                    
+                }
+            };
+        }
+    });
+    $.ajax({
+        url: j_url + "/index/article/getImg",
+        type: "POST",
+        data: {},
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                banner.innerHTML = '<img src="..'+info.pic+'" alt="">';
+            };
+        }
+    });
+    function rent(e) {
+        $.ajax({
+            url: j_url + "/index/shop/buyMachine",
+            type: "POST",
+            data: {level: e},
+            dataType: "json",
+            async: true,
+            crossDomain: true,
+            success: function(res) {
+                console.log(res);
+                if (res.code == 0) {
+                    layer.open({
+                        content: res.message,
+                        skin: 'msg',
+                        time: 2
+                    });
+                } else {
+                    layer.open({
+                        content: res.message,
+                        skin: 'msg',
+                        time: 2
+                    });
+                }
+            }
+        });
+    };
+</script>
+</html>

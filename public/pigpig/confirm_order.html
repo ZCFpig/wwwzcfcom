@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>确认订单</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/swiper.min.css">
+    <script src="../static/js/swiper.min.js"></script>
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem 0rem 1.44rem;}
+        .goods-data {display: flex;align-items: center;padding: .24rem;background: #fff;}
+        .goods-data-l img {width: 3rem;height: 3rem;}
+        .goods-name {padding-left: .24rem;min-height: .64rem;line-height: .64rem;font-size: .426667rem;color: #333;}
+        .goods-price {margin-top: .08rem;padding-left: .24rem;min-height: .64rem;line-height: .64rem;font-size: .426667rem;color: #f00;}
+        #buy-num {margin-left: .32rem;font-size: .373333rem;color: #999;}
+        .data {margin-top: .32rem;background: #fff;}
+        .data-item {display: flex;justify-content: space-between;padding: 0rem .32rem;height: 1.226667rem;align-items: center;border-bottom: 1px solid #F5F5F5;}
+        .data-item-l {width: 30%;font-size: .4rem;color: #333;}
+        .data-item-r {width: 70%;font-size: .4rem;color: #999;text-align: right;}
+        .data-item-r input {width: 100%;height: 1.2rem;border: none;}
+        .address-box {margin-top: .266667rem;padding: .32rem;background: #fff;}
+        .tip {font-size: .4rem;color: #333;}
+        #address {margin-top: .16rem;padding: .16rem .24rem;width: 100%;font-size: .4rem;color: #333;resize: none;border: 1px solid #aaa;}
+        .footer {position: fixed;left: 0;bottom: 0;display: flex;justify-content: space-between;align-items: center;width: 100%;height: 1.44rem;background: #fff;}
+        .total {padding-left: .32rem;font-size: .426667rem;color: #333;}
+        .total-num {color: #f00;}
+        .confirm {width: 3.04rem;height: 1.44rem;line-height: 1.44rem;border: none;background: #2E80C5;font-size: .426667rem;text-align: center;color: #fff;}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>确认订单</span>
+    </header>
+    <main class="main">
+        <div class="goods-data">
+            <div class="goods-data-l">
+                <!-- <img src="../static/images/background_img@2x.png" alt=""> -->
+            </div>
+            <div class="goods-data-r">
+                <div class="goods-name"></div>
+                <div class="goods-price"><span id="goods-price"></span><span>ZCF</span><span id="buy-num"></span></div>
+            </div>
+        </div>
+        <div class="data">
+            <div class="data-item">
+                <div class="data-item-l">商品总额</div>
+                <div class="data-item-r" id="goods-total"></div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-l">猪猪钱包余额</div>
+                <div class="data-item-r" id="balance"></div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-l">收件人姓名</div>
+                <div class="data-item-r">
+                    <input type="text" id="full-name" placeholder="请输入收件人姓名">
+                </div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-l">收件人号码</div>
+                <div class="data-item-r">
+                    <input type="text" id="phone" placeholder="请输入收件人号码">
+                </div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-l">支付密码</div>
+                <div class="data-item-r">
+                    <input type="password" id="pay-psw" placeholder="请输入支付密码">
+                </div>
+            </div>
+        </div>
+        <div class="address-box">
+            <div class="tip">收货地址：</div>
+            <textarea name="" id="address" cols="30" rows="4" placeholder="请输入您的收货地址"></textarea>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="total">合计：<span class="total-num"></span></div>
+        <button class="confirm">提交订单</button>
+    </footer>
+</body>
+<script>
+    var goodsDataL = document.querySelector('.goods-data-l');
+    var goodsName = document.querySelector('.goods-name');
+    var goodsPrice = document.querySelector('#goods-price');
+    var buyNum = document.querySelector('#buy-num');
+    var goodsTotal = document.querySelector('#goods-total');
+    var balance = document.querySelector('#balance');
+    var fullName = document.querySelector('#full-name');
+    var phone = document.querySelector('#phone');
+    var payPsw = document.querySelector('#pay-psw');
+    var address = document.querySelector('#address');
+    var totalNum = document.querySelector('.total-num');
+    var confirm = document.querySelector('.confirm');
+    // 获取url中的参数
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);return null;
+    }
+    var urlParameterID = GetQueryString("goods_id");
+    var urlParameterNum = GetQueryString("buy_num");
+    buyNum.innerHTML = urlParameterNum ? '×' + urlParameterNum : '';
+    $.ajax({
+        url: j_url + "/index/shop/readyOrder",
+        type: "GET",
+        data: {
+            goods_id: urlParameterID,
+            num: urlParameterNum
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                goodsDataL.innerHTML = '<img src="..' + info.img + '" alt="">';
+                goodsName.innerHTML = info.goods_title;
+                goodsPrice.innerHTML = urlParameterNum ? info.goods_prices * urlParameterNum : '';
+                goodsTotal.innerHTML = totalNum.innerHTML = urlParameterNum ? info.goods_prices * urlParameterNum + 'ZCF' : '';
+                balance.innerHTML = info.wallet_num + 'ZCF';
+            }
+        }
+    });
+    // 手机号正则
+    var regPhone = /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/;
+    var patternPhone = new RegExp(regPhone);
+    confirm.addEventListener('click', function () {
+        if (fullName.value == '') {
+            layer.open({
+                content: '收件人姓名不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (phone.value == '') {
+            layer.open({
+                content: '收件人号码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (!patternPhone.test(phone.value)) {
+            layer.open({
+                content: '请输入正确的手机号码',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (payPsw.value == '') {
+            layer.open({
+                content: '支付密码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (address.value == '') {
+            layer.open({
+                content: '收货地址不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (!urlParameterID || !urlParameterNum) {
+            layer.open({
+                content: '参数错误',
+                skin: 'msg',
+                time: 2
+            });
+        } else {
+            $.ajax({
+                url: j_url + "/index/shop/buyOrder",
+                type: "POST",
+                data: {
+                    goods_id: urlParameterID,
+                    user_name: fullName.value,
+                    mobile: phone.value,
+                    num: urlParameterNum,
+                    address: address.value,
+                    trad_password: payPsw.value
+                },
+                dataType: "json",
+                async: true,
+                crossDomain: true,
+                success: function success(res) {
+                    console.log(res);
+                    if (res.code == 0) {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                        confirm.setAttribute('disabled', 'disabled');
+                        setTimeout(function () {
+                            window.location.href = 'shopping_mall.html';
+                        }, 1500);
+                    } else {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                    };
+                }
+            });
+        }
+    });
+</script>
+</html>

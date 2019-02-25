@@ -1,0 +1,164 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<section class="panel">
+    {if isset($list)}
+    <header class="panel-heading">
+        <h4>编辑套餐</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" method="post" onsubmit="return false" role="form">
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >会员等级</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" name="level" class="form-control" value="{$list['level']}">
+                    <div class="input-group-addon">级会员</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">价格</label>
+
+                <div class="col-sm-5 input-group" >
+                    <input type="text" name="money" class="form-control" value="{$list['money']}">
+                    <div class="input-group-addon">RMB</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">增值倍数</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="{$list['times']}" name="times" class="form-control" >
+                    <div class="input-group-addon">倍</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">日算力</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="{$list['day_power']}" name="day_power" class="form-control">
+                    <div class="input-group-addon">比例</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">复投倍数</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="{$list['recast']}" name="recast" class="form-control">
+                    <div class="input-group-addon">倍</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">闭环总倍数</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="{$list['total']}" name="total" class="form-control">
+                    <div class="input-group-addon">倍</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">节点分享算力</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="{$list['share']}" name="share" class="form-control">
+                    <div class="input-group-addon">比例</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" onclick="main.ajaxPosts(this)" data-url="{:url('admin/user/updatepackage',['id'=>$list->id])}"
+                            class="btn btn-primary">提交
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {else /}
+    <header class="panel-heading">
+        <h4>添加会员套餐</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" method="post" onsubmit="return false" role="form">
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" >会员等级</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" name="level" class="form-control" value="">
+                    <div class="input-group-addon">级会员</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">价格</label>
+
+                <div class="col-sm-5 input-group" >
+                    <input type="text" name="money" class="form-control" value="">
+                    <div class="input-group-addon">RMB</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">增值倍数</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="" name="times" class="form-control" >
+                    <div class="input-group-addon">倍</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">日算力</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="" name="day_power" class="form-control">
+                    <div class="input-group-addon">比例</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">复投倍数</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="" name="recast" class="form-control">
+                    <div class="input-group-addon">倍</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">闭环总倍数</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="" name="total" class="form-control">
+                    <div class="input-group-addon">倍</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">节点分享算力</label>
+
+                <div class="col-sm-5 input-group">
+                    <input type="text" value="" name="share" class="form-control">
+                    <div class="input-group-addon">比例</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" onclick="main.ajaxPosts(this)" data-url="{:url('admin/user/createpack')}"
+                            class="btn btn-primary">提交
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {/if}
+</section>
+{/block}
+
+
+{block name="footer"}
+<script src="/admin/vendor/fuelux/checkbox.js"></script>
+{/block}

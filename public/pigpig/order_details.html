@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>交易订单详情</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/clipboard.min.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem .373333rem .373333rem;}
+        .content {margin-top: .373333rem;padding: .533333rem;width: 100%;border-radius: .266667rem;background: #fff;}
+        .state-box {display: flex;justify-content: space-between;}
+        .state-box {height: .373333rem;line-height: .373333rem;font-size: .373333rem;color: #333;}
+        .money-box {height: .373333rem;line-height: .373333rem;font-size: .373333rem;color: #FF4B4B;}
+        .num-box {margin-top: .4rem;height: .373333rem;line-height: .373333rem;font-size: .373333rem;color: #333;}
+        .time {height: .613333rem;display: flex;justify-content: flex-end;align-items: center;font-size: .32rem;color: #999;border-bottom: 1px solid #E0E0E0;}
+        .beneficiary {margin-top: .32rem;height: .8rem;line-height: .8rem;font-size: .373333rem;color: #333;}
+        .client-data {display: flex;align-items: center;height: .8rem;}
+        .full-name {font-size: .373333rem;color: #333;}
+        .alipay {display: flex;align-items: center;margin-left: .8rem;font-size: .373332rem;color: #333;}
+        #alipay-account {width: 2.8rem;border: none;font-size: .373333rem;color: #333;}
+        .buyer, .bank-card, .qrcode-name {display: flex;align-items: center;height: .8rem;font-size: .373332rem;color: #333;}
+        .alipay-qrcode img {width: 100%;}
+        .tip {height: .8rem;line-height: .8rem;font-size: .32rem;color: #2E80C5;}
+        .copy-btn {display: block;margin-top: .533333rem;width: 100%;height: 1.173333rem;line-height: 1.173333rem;font-size: .48rem;color: #fff;text-align: center;border: none;border-radius: .266667rem;background: #2E80C5;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>交易订单详情</span>
+    </header>
+    <main class="main">
+        <div class="content">
+            <div class="state-box">
+                <div class="state-box">订单状态：<span class="state"></span></div>
+                <div class="money-box">金额：<span class="money"></span>￥</div>
+            </div>
+            <div class="num-box">数量：<span class="num"></span>个可售猪猪</div>
+            <div class="time">1970-01-01 00:00:00</div>
+            <div class="beneficiary">收款方</div>
+            <div class="client-data">
+                <div class="full-name">姓名：xxx</div>
+                <div class="alipay">
+                    <span>支付宝：</span>
+                    <input type="text" id="alipay-account">
+                </div>
+            </div>
+            <div class="buyer">买方联系方式：<span id="buyer-phone"></span></div>
+            <div class="bank-card">银行卡号：<span id="bank-card"></span></div>
+            <div class="bank-card">开户银行：<span id="bank"></span></div>
+            <div class="qrcode-box">
+                <div class="qrcode-name">支付宝收款二维码：</div>
+                <div class="alipay-qrcode"></div>
+            </div>
+            <div class="tip">（注意：转账切勿填写任何备注）</div>
+            <button class="copy-btn" style="cursor: pointer;" data-clipboard-action="copy" data-clipboard-target="#alipay-account">复制支付宝账号</button>
+        </div>
+    </main>
+</body>
+<script>
+    var state = document.querySelector('.state');
+    var money = document.querySelector('.money');
+    var num = document.querySelector('.num');
+    var time = document.querySelector('.time');
+    var fullName = document.querySelector('.full-name');
+    var alipayAccount = document.querySelector('#alipay-account');
+    var buyerPhone = document.querySelector('#buyer-phone');
+    var bankCard = document.querySelector('#bank-card');
+    var bank = document.querySelector('#bank');
+    var alipayQrcode = document.querySelector('.alipay-qrcode');
+    // 复制邀请码
+    var clipboard = new ClipboardJS('.copy-btn');
+    clipboard.on('success', function (e) {
+        layer.open({
+            content: "复制成功！",
+            skin: 'msg',
+            time: 2
+        });
+    });
+    clipboard.on('error', function (e) {
+        layer.open({
+            content: "复制成功！",
+            skin: 'msg',
+            time: 2
+        });
+    });
+    // 获取url中的参数
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);return null;
+    }
+    var urlParameter = GetQueryString("order_id");
+    $.ajax({
+        url: j_url + "/index/shop/marketInfo",
+        type: "POST",
+        data: {
+            market_id: urlParameter
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                var status = void 0;
+                switch (info.status) {
+                    case 1:
+                        status = '等待匹配';
+                        break;
+                    case 2:
+                        status = '等待付款';
+                        break;
+                    case 3:
+                        status = '等待收款';
+                        break;
+                    case 4:
+                        status = '交易完成';
+                        break;
+                }
+                state.innerHTML = status;
+                money.innerHTML = Number(info.total);
+                num.innerHTML = Number(info.num);
+                time.innerHTML = info.matching_time;
+                fullName.innerHTML = '姓名：' + info.real_name;
+                alipayAccount.value = info.zfb;
+                buyerPhone.innerHTML = info.buy_mobile;
+                bankCard.innerHTML = info.sell_card ? info.sell_card : '';
+                bank.innerHTML = info.sell_card_name ? info.sell_card_name : '';
+                alipayQrcode.innerHTML = info.sell_zfb_img ? '<img src="' + info.sell_zfb_img + '" alt="">' : '';
+            };
+        }
+    });
+</script>
+</html>

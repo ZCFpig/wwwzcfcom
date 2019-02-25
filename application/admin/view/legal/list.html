@@ -1,0 +1,120 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<style>
+    .listli{
+           background-color: #fff;
+    }
+    .select {
+        color: #ffffff;
+        background-color: #1ec3c8;
+        border-color: #1ec3c8;
+    }
+    .select:hover{
+        color: #fff;
+    }
+</style>
+
+<section class="panel">
+    <header class="panel-heading">
+        <h4>报单列表</h4>
+    </header>
+
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" action="{:url('admin/legal/index')}" >
+            <div class="form-group">
+                <div class="col-xs-1 no-pd-r">
+                    <select name="status" class="form-control">
+                        <option  value="0">全部状态</option>
+                        <option {if $Request.get.status == 2} selected {/if} value="2">等待审批</option>
+                        <option {if $Request.get.status == 1} selected {/if} value="1">拒绝报单</option>
+                        <option {if $Request.get.status == 3} selected {/if} value="3">通过报单</option>
+                    </select>
+                </div>
+                
+                <div class="col-xs-1 no-pd-r">
+                    <select name="type" class="form-control">
+                        <option {if $Request.get.type == 'mobile'} selected {/if} value="mobile">会员电话</option>
+                    </select>
+                </div>
+                <div class="col-xs-3 no-pd-l">
+                    <input type="text" value="{$Request.get.keyword}" name="keyword" class="form-control" placeholder="请输入对应电话搜索">
+                </div>
+                <button type="submit" class="btn btn-color">搜索</button>
+            </div>
+        </form>
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+                <tr>
+                    <th class="text-center">ID编号</th>
+                    <th class="text-center">用户信息</th>
+                    <th class="text-center">协助会员信息</th>
+                    <th class="text-center">报单凭证</th>
+                    <th class="text-center">状态</th>
+                    <th class="text-center">转化币</th>
+                    <th class="text-center">报单时间</th>
+                    <th class="text-center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            {if $list}
+                {foreach $list as $order}
+                    <tr>
+                        <td class="text-center">{$order->id}</td>
+                        <td class="text-center">
+                            昵称：{$order->nick_name}<br>
+                            电话：{$order->mobile}
+                        </td>
+                        <td class="text-center">
+                           {if $order->helpmobile}
+                               昵称：{$order->helpname}<br>
+                               电话：{$order->helpmobile}
+                           {/if}
+                        </td>
+                        <td class="text-center">
+                            {if $order->voucher}
+                                 <a href="{$order->voucher}"  target="_blank"><img src="{$order->voucher}"/ style="width:200px"></a>
+                            {/if}
+        
+                        </td>
+                        <td class="text-center">
+                            {$order->getStatus()}
+                        </td>
+                         <td class="text-center">
+                            {if $order->amoun >0}{$order->amoun}{/if}
+                        </td>
+
+                        <td class="text-center">
+                            {:date('Y-m-d H:i:s',$order->createtime)}
+                        </td>
+                        <td class="text-center">
+                
+                            {if $order->status == 0}
+                                <a class="btn btn-xs btn-primary" data-msg="确定完成报单吗" onclick="main.ajaxDelete(this)" data-url="{:url('legal/update',['id'=>$order->id,'do'=>'achieve'])}">完成报单</a>
+                                <a class="btn btn-xs btn-danger" data-msg="确定取消报单吗" onclick="main.ajaxDelete(this)" data-url="{:url('legal/update',['id'=>$order->id,'do'=>'cancel'])}">取消报单</a>
+                            {/if} 
+                        </td>
+                    </tr>
+                {/foreach}
+            {else /}
+                <tr class="text-center">
+                    <td colspan="8">暂无数据</td>
+                </tr>
+            {/if}
+            </tbody>
+        </table>
+        <div class="page">
+            {:htmlspecialchars_decode($list->render())}
+        </div>
+    </div>
+</section>
+{/block}
+
+
+{block name="footer"}
+
+{/block}

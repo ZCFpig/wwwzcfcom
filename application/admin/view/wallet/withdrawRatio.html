@@ -1,0 +1,88 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<section class="panel">
+    <header class="panel-heading">
+        <h4>比例设置</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+            <tr>
+                <th class="text-center">序号</th>
+                <th class="text-center">名称</th>
+                <th class="text-center">比例</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $list as $key=>$config}
+            <tr>
+
+                <td class="text-center" style="vertical-align: middle; ">{$key+1}</td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text" readonly="readonly"  style="text-align: center"  id="updname{$config['id']}" class="form-control" value="{$config['name']}"></td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text" id="updratio{$config['id']}" style="text-align: center" class="form-control"
+                           value="{:floatval($config['ratio'])}">
+                </td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <a onclick="updateConfig(this)" data-id="{$config['id']}" class="btn btn-xs btn-primary">确认修改</a>
+                </td>
+            </tr>
+            {/foreach}
+            <!-- <tr>
+                <td class="text-center" style="vertical-align: middle; "></td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text"  style="text-align: center" id="name" class="form-control" value=""></td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text"  style="text-align: center" 熊id='ratio' class="form-control" value="">
+                </td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <a onclick="addConfig(this)" class="btn btn-xs btn-primary">确认添加</a>
+                </td>
+            </tr> -->
+            </tbody>
+        </table>
+
+    </div>
+</section>
+{/block}
+
+{block name="footer"}
+
+<script>
+    function addConfig(e) {
+        var id = $(e).attr('data-id');
+
+        var date = $('#name'+id).val();
+        var ratio = $('#ratio'+id).val();
+
+        $.post("{:url('wallet/withdrawratioadd')}", {name: name,ratio: ratio}, function (data) {
+            if (data.code == 1) {
+                main.waringAlert(data.message);
+            } else {
+                main.waringAlert(data.message);
+                window.location.reload();
+            }
+        }, 'json')
+    }
+    function updateConfig(e) {
+        var id = $(e).attr('data-id');
+        var ratio = $('#updratio'+id).val();
+        var name = $('#updname'+id).val();
+        $.post("{:url('wallet/withdrawratioupd')}", {id: id,name: name, ratio:ratio}, function (data) {
+            if (data.code == 1) {
+                main.waringAlert(data.message);
+            } else {
+                main.waringAlert(data.message);
+                window.location.reload();
+            }
+        }, 'json')
+    }
+</script>
+{/block}

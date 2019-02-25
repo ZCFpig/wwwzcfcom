@@ -1,0 +1,116 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<section class="panel">
+    <header class="panel-heading">
+        <h4>交易记录</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" action="">
+            <div class="form-group">
+                <div class="col-xs-2 no-pd-r">
+                    <select name="types" id="types" class="form-control">
+                        <option value="0">全部类型</option>
+                        <option {if $Request.get.types == '1'} selected {/if} value="1">等待匹配</option>
+                        <option {if $Request.get.types == '2'} selected {/if} value="2">等待付款</option>
+                        <option {if $Request.get.types == '3'} selected {/if} value="3">等待收款</option>
+                        <option {if $Request.get.types == '4'} selected {/if} value="4">交易完成</option>
+                        <option {if $Request.get.types == '5'} selected {/if} value="5">交易失败</option>
+                        <option {if $Request.get.types == '6'} selected {/if} value="6">取消交易</option>
+                    </select>
+                </div>
+                <div class="col-xs-3 no-pd-l">
+                    <input type="text" id="keyword" value="{$Request.get.keyword}" name="keyword" class="form-control" placeholder="请输入会员账号搜索">
+                </div>
+                <button type="submit" class="btn btn-color">搜索</button>
+                <!--<button type="button" class="btn btn-success" id="export">导出</button>-->
+                {if $count}
+                &nbsp;&nbsp;总量：{$count}
+                {/if}
+            </div>
+        </form>
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+            <tr>
+                <th class="text-center">id</th>
+                <th class="text-center">买入会员账号</th>
+                <th class="text-center">数量</th>
+                <th class="text-center">价格</th>
+                <th class="text-center">总价</th>
+                <th class="text-center">卖出用户账号</th>
+                <th class="text-center">付款凭证图片</th>
+                <th class="text-center">状态</th>
+                <th class="text-center">时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if !empty($list)}
+            {foreach $list as $entity}
+            <tr>
+                <form class="form-horizontal" method="post" onsubmit="return false" role="form">
+                    <td class="text-center">{$entity->id}</td>
+                    <td class="text-center">{$entity->mobile}</td>
+                    <td class="text-center">{$entity->num} </td>
+                    <td class="text-center">{$entity->price} </td>
+                    <td class="text-center">{$entity->total} </td>
+                    <td class="text-center">{$entity->from_mobile} </td>
+                    <td class="text-center"><img src="{:str_replace('..','',$entity->zfb_img)}" width="200px" height="200px"></td>
+                    <td class="text-center">
+                        {if $entity->status == '1'}
+                        <button class="btn btn-xs btn-default">等待匹配</button>
+                        {elseif $entity->status == '2'}
+                        <button class="btn btn-xs btn-default">等待付款</button>
+                        {elseif $entity->status == '3'}
+                        <button class="btn btn-xs btn-default">等待收款</button>
+                        {elseif $entity->status == '4'}
+                        <button class="btn btn-xs btn-success">交易完成</button>
+                        {elseif $entity->status == '5'}
+                        <button class="btn btn-xs btn-danger">交易失败</button>
+                        {elseif $entity->status == '6'}
+                        <button class="btn btn-xs btn-danger">取消交易</button>
+                        {/if}
+                    </td>
+                    <td class="text-center">
+                        创建: {$entity->create_time}<br/>
+                        匹配: {$entity->matching_time}<br/>
+                        付款: {$entity->pay_time}<br/>
+                        完成: {$entity->end_time}
+                    </td>
+                </form>
+            </tr>
+            {/foreach}
+            {else /}
+            <tr class="text-center">
+                <td colspan="7">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        <div class="page">
+            {:htmlspecialchars_decode($list->render())}
+        </div>
+    </div>
+</section>
+{/block}
+
+
+{block name="footer"}
+<form action="{:url('admin/user/exportfzBncLog')}" id="exportForm">
+    <input type="hidden" name="type" id="e_type">
+    <input type="hidden" name="keyword" id="e_keyword">
+</form>
+<script>
+    //导出会员信息
+    $("#export").click(function(){
+        var keyword = $("#keyword").val();
+        var type = $("#type").val();
+        $('#e_keyword').val(keyword);
+        $('#e_type').val(type);
+        $("#exportForm").submit();
+    })
+</script>
+{/block}

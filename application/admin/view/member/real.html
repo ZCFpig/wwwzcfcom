@@ -1,0 +1,107 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<style type="text/css">
+    .link-th{
+        color:blue;
+    }
+</style>
+<section class="panel">
+    <header class="panel-heading">
+        <h4>会员列表</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <!--<form class="form-horizontal" action="{:url('admin/member/real')}">-->
+            <!--<div class="form-group">-->
+                <!--<div class="col-xs-1 no-pd-r">-->
+                    <!--<select name="type" id="type" class="form-control">-->
+                        <!--<option {if $Request.get.type == 'mobile'} selected {/if} value="mobile">电话号码</option>-->
+                        <!--<option {if $Request.get.type == 'nick_name'} selected {/if} value="nick_name">昵称</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+                <!--<div class="col-xs-3 no-pd-l">-->
+                    <!--<input type="text" id="keyword" value="{$Request.get.keyword}" name="keyword" class="form-control" placeholder="请输入关键词搜索">-->
+                <!--</div>-->
+                <!--<button type="submit" class="btn btn-color">搜索</button>-->
+                <!--<button type="button" class="btn btn-success" id="export">导出</button>-->
+                <!--<a type="button" href="/admin/user/create" class="btn btn-info">添加会员</a>-->
+            <!--</div>-->
+        <!--</form>-->
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">用户注册手机号</th>
+                <th class="text-center">身份证号</th>
+                <th class="text-center">身份证正面照片</th>
+                <th class="text-center">身份证反面照片</th>
+                <th class="text-center">状态</th>
+                <th class="text-center">提交日期</th>
+                <th class="text-center">审核日期</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if !empty($list)}
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td style="vertical-align: middle" class="text-center">
+                    {$vo.id}
+                </td>
+                <td style="vertical-align: middle" class="text-center">
+                    {$vo.nick_name}
+                </td>
+                <td style="vertical-align: middle" class="text-center">
+                    {$vo.id_num}
+                </td>
+                <td style="vertical-align: middle" class="text-center">
+                    <img src="/static/upload/{$vo.positive}" style="width: 200px" alt="">
+                </td>
+                <td style="vertical-align: middle" class="text-center">
+                    <img src="/static/upload/{$vo.back}" style="width: 200px" alt="">
+                </td>
+                <td style="vertical-align: middle" class="text-center">
+                    {if $vo.status == 1}
+                    待审核
+                    {elseif $vo.status == 2 }
+                    审核成功
+                    {elseif $vo.status == 3 }
+                    审核失败
+                    {/if}
+                </td>
+                <td style="vertical-align: middle" class="text-center">
+                    {$vo.create_date}
+                </td>
+                <td style="vertical-align: middle" class="text-center">
+                    {$vo.update_date}
+                </td>
+                <td style="vertical-align: middle" class="text-center">
+                    {if $vo.status == 1}
+                    <a data-url="{:url('member/pass')}?id={$vo.id}&status=2" onclick="main.ajaxDelete(this)" data-msg="确定要通过此会员吗？" class="btn btn-xs btn-success">通过</a>
+                    <a data-url="{:url('member/pass')}?id={$vo.id}&status=3" onclick="main.ajaxDelete(this)" data-msg="确定要不通过此会员吗？" class="btn btn-xs btn-danger">不通过</a>
+                    {/if}
+                    <a data-url="{:url('member/del')}?id={$vo.id}" onclick="main.ajaxDelete(this)" data-msg="确定要删除吗？" class="btn btn-xs btn-danger">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            {else /}
+            <tr class="text-center">
+                <td colspan="9">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        <div class="page">
+            {:htmlspecialchars_decode($list->render())}
+        </div>
+    </div>
+</section>
+{/block}
+{block name="footer"}
+
+
+{/block}

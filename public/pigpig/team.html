@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>团队</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;width: 100%;height: 1.28rem;line-height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;font-weight: bold;}
+        .main {padding: 1.28rem 0rem 1.333333rem;}
+        .footer {position: fixed;bottom: 0;left: 0;display: flex;justify-content: space-between;padding-top: .16rem;width: 100%;height: 1.333333rem;background: #fff;border-top: 1px solid #E0E0E0;}
+        .footer-nav {width: 20%;display: flex;justify-content: center;}
+        .footer-icon {text-align: center;}
+        .footer-icon img {height: .533333rem;vertical-align: bottom;}
+        .footer-name {padding-top: .08rem;font-size: .32rem;color: #999;text-align: center;}
+        .footer-active .footer-name {color: #2E80C5;}
+        .receive-box {position: fixed;left: 0;bottom: 1.733333rem;width: 100%;padding: 0rem .906667rem;}
+        .receive {display: block;padding: 0rem .4rem;width: 100%;height: 1.173333rem;line-height: 1.173333rem;font-size: .48rem;color: #fff;text-align: center;border: none;background: #2E80C5;border-radius: .266667rem;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+        .team {width: 100%;}
+        .team thead tr {background: #2E80C5;}
+        .team tbody tr {background: #fff;}
+        .team th {padding: .32rem 0rem;line-height: .533333rem;text-align: center;font-size: .373333rem;color: #fff;}
+        .team td {padding: .346667rem 0rem;line-height: .48rem;text-align: center;font-size: .293333rem;color: #333;}
+        .team td a {font-size: .293333rem;color: #2E80C5;}
+        .team th:nth-child(1), .team td:nth-child(1) {width: 21.5%;}
+        .team th:nth-child(2), .team td:nth-child(2) {width: 12.2%;}
+        .team th:nth-child(3), .team td:nth-child(3) {width: 15%;}
+        .team th:nth-child(4), .team td:nth-child(4) {width: 12.2%;}
+        .team th:nth-child(5), .team td:nth-child(5) {width: 19.6%;}
+        .team th:nth-child(6), .team td:nth-child(6) {width: 19.5%;}
+        .team td:last-child {color: #2E80C5;}
+    </style>
+<body>
+    <header class="header">
+        <span>团队</span>
+    </header>
+    <main class="main">
+        <table class="team">
+            <thead>
+                <tr>
+                    <th>会员账号</th>
+                    <th>姓名</th>
+                    <th>等级</th>
+                    <th>直推</th>
+                    <th>团队算力</th>
+                    <th>注册人数</th>
+                </tr>
+            </thead>
+            <tbody class="team-list">
+                <!-- <tr>
+                    <td>18546895846</td>
+                    <td>说*么</td>
+                    <td>一级旷工</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr> -->
+            </tbody>
+        </table>
+    </main>
+    <footer class="footer">
+        <div class="footer-nav" onclick="window.location.href='index.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_home_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">首页</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='mining_machine.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_machine_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">农场</div>
+            </div>
+        </div>
+        <div class="footer-nav footer-active">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_team_Selected_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">团队</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='transaction.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_cross_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">交易</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='center.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_mine_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">我的</div>
+            </div>
+        </div>
+    </footer>
+</body>
+<script>
+    var teamList = document.querySelector('.team-list');
+    var page = 1;
+    var limit = 15;
+    // 获取url中的参数
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r !=null ) return unescape(r[2]); return null;
+    }
+    var urlParameter = GetQueryString("id");
+    if (urlParameter) {
+        $.ajax({
+            url: j_url + "/index/member/getTeamInfo",
+            type: "POST",
+            data: {uid: urlParameter},
+            dataType: "json",
+            async: true,
+            crossDomain: true,
+            success: function(res) {
+                console.log(res);
+                if (res.code == 0 && res.info) {
+                    var info = res.info;
+                    for (var i = 0; i < info.length; i++) {
+                        var item = info[i];
+                        var level;
+                        var clickToView = item.child_num > 0 ? '<a href="team.html?id='+item.id+'">点击查看</a>' : '';
+                        switch (item.level) {
+                            case 0:
+                                level = '农场主';
+                                break;
+                            case 1:
+                                level = '铜牌农场主';
+                                break;
+                            case 2:
+                                level = '银牌农场主';
+                                break;
+                            case 3:
+                                level = '金牌农场主';
+                                break;
+                            case 4:
+                                level = '钻石农场主';
+                                break;
+                        };
+
+                        var html = '';
+                        html+='<tr>';
+                            html+='<td>'+item.mobile+'</td>';
+                            html+='<td>'+item.real_name+'</td>';
+                            html+='<td>'+level+'</td>';
+                            html+='<td>'+item.zhitui+'</td>';
+                            html+='<td>'+item.team_hash+'</td>';
+                            html+='<td>'+item.child_num+clickToView+'</td>';
+                        html+='</tr>';
+
+                        teamList.innerHTML += html;
+                    };
+                };
+            }
+        });
+    } else {
+        $.ajax({
+            url: j_url + "/index/member/getTeamInfo",
+            type: "POST",
+            data: {},
+            dataType: "json",
+            async: true,
+            crossDomain: true,
+            success: function(res) {
+                console.log(res);
+                if (res.code == 0 && res.info) {
+                    var info = res.info;
+                    for (var i = 0; i < info.length; i++) {
+                        var item = info[i];
+                        var level;
+                        var clickToView = item.child_num > 0 ? '<a href="team.html?id='+item.id+'">点击查看</a>' : '';
+                        switch (item.level) {
+                            case 0:
+                                level = '农场主';
+                                break;
+                            case 1:
+                                level = '铜牌农场主';
+                                break;
+                            case 2:
+                                level = '银牌农场主';
+                                break;
+                            case 3:
+                                level = '金牌农场主';
+                                break;
+                            case 4:
+                                level = '钻石农场主';
+                                break;
+                        }
+                        var html = '';
+                        html+='<tr>';
+                            html+='<td>'+item.mobile+'</td>';
+                            html+='<td>'+item.real_name+'</td>';
+                            html+='<td>'+level+'</td>';
+                            html+='<td>'+item.zhitui+'</td>';
+                            html+='<td>'+item.team_hash+'</td>';
+                            html+='<td>'+item.child_num+clickToView+'</td>';
+                        html+='</tr>';
+
+                        teamList.innerHTML += html;
+                    };
+                };
+            }
+        });
+    }
+</script>
+</html>

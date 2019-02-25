@@ -1,0 +1,155 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<!--<link rel="stylesheet" href="http://cdn.staticfile.org/webuploader/0.1.5/webuploader.css">-->
+<!--<script type="text/javascript" src='http://cdn.staticfile.org/webuploader/0.1.5/webuploader.min.js'></script>-->
+<style type="text/css">
+
+</style>
+
+
+<section class="panel">
+    <header class="panel-heading">
+        <h4>用户升级配置</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+            <tr>
+                <th class="text-center">序号</th>
+                <th class="text-center">等级</th>
+                <th class="text-center">直推数量</th>
+                <th class="text-center">直推等级(填0,1,2,3,4)</th>
+                <th class="text-center">算力数量</th>
+                <th class="text-center">三代会员数</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $list as $key=>$config}
+            <tr>
+                <td class="text-center" style="vertical-align: middle; ">{$key+1}</td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    {if $config['level'] == 1}
+                    铜牌农场主
+                    {elseif $config['level'] == 2}
+                    银牌农场主
+                    {elseif $config['level'] == 3}
+                    金牌农场主
+                    {elseif $config['level'] == 4}
+                    钻石农场主
+                    {/if}
+                </td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text" id="_zhitui_num{$config['id']}" style="text-align: center" class="form-control"
+                           value="{$config['zhitui_num']}">
+                </td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text" id="_zhitui_level{$config['id']}" style="text-align: center" class="form-control"
+                           value="{$config['zhitui_level']}">
+                </td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text" id="_hash_num{$config['id']}" style="text-align: center" class="form-control"
+                           value="{$config['hash_num']}">
+                </td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text" id="_three{$config['id']}" style="text-align: center" class="form-control"
+                           value="{$config['three']}">
+                </td>
+
+                <td class="text-center" style="vertical-align: middle; ">
+                    <a onclick="updateConfigCopy(this)" data-level="{$config['level']}" data-total_zhitui_num="{$config['zhitui_num']}" data-zhitui_level="{$config['zhitui_level']}" data-hash_num="{$config['hash_num']}" data-three="{$config['three']}"  id-data="{$config['id']}" class="btn btn-xs btn-primary">确认修改</a>
+                </td>
+
+            </tr>
+            <!-- {/if} -->
+            {/foreach}
+            <!--<tr>-->
+                <!--<td class="text-center" style="vertical-align: middle; "></td>-->
+                <!--<td class="text-center" style="vertical-align: middle; ">-->
+                    <!--<input type="text"  style="text-align: center" id="name" class="form-control" value=""></td>-->
+                <!--<td class="text-center" style="vertical-align: middle; ">-->
+                    <!--<input type="text"  style="text-align: center" id="key" class="form-control" value=""></td>-->
+
+                <!--<td class="text-center" style="vertical-align: middle; ">-->
+                    <!--<input type="text"  style="text-align: center" id='values' class="form-control" value="">-->
+                <!--</td>-->
+                <!--<td class="text-center" style="vertical-align: middle; ">-->
+                    <!--<a onclick="addConfig(this)" class="btn btn-xs btn-primary">确认添加</a>-->
+                <!--</td>-->
+            <!--</tr>-->
+            </tbody>
+
+
+
+        </table>
+
+    </div>
+</section>
+
+
+
+
+
+{/block}
+
+{block name="footer"}
+
+<script>
+
+    function addConfig(e) {
+        var name = $('#name').val();
+        var key = $('#key').val();
+        var values = $('#values').val();
+
+
+        $.post("{:url('packageSetadd')}", {name: name,key: key, values: values}, function (data) {
+            if (data.code == 1) {
+                main.waringAlert(data.message);
+            } else {
+                main.waringAlert(data.message);
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000)
+            }
+        }, 'json')
+    }
+    function updateConfigCopy(e) {
+        var id = $(e).attr('id-data');
+
+        var level = $(e).attr('data-level');
+
+
+        var zhitui_num1 = $(e).attr('data-zhitui_num');
+        var zhitui_num = $('#_zhitui_num' +id).val();
+        var zhitui_level1 = $(e).attr('data-zhitui_level');
+        var zhitui_level = $('#_zhitui_level' +id).val();
+        var hash_num1 = $(e).attr('data-hash_num');
+        var hash_num = $('#_hash_num' +id).val();
+        var three1 = $(e).attr('data-three');
+        var three = $('#_three' +id).val();
+        $.post("{:url('packageSetsave')}", {id: id, level: level, zhitui_num:zhitui_num,zhitui_level:zhitui_level,hash_num:hash_num,three:three}, function (data) {
+            if (data.code == 1) {
+                main.waringAlert(data.message);
+            } else {
+                main.waringAlert(data.message);
+                window.location.reload();
+            }
+        }, 'json')
+    }
+
+
+
+
+
+
+</script>
+
+
+
+</script>
+{/block}

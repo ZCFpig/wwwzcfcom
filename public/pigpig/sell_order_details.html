@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>交易订单详情</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/clipboard.min.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem .373333rem .373333rem;}
+        .content {margin-top: .373333rem;padding: .533333rem;width: 100%;border-radius: .266667rem;background: #fff;}
+        .content-top {display: flex;justify-content: space-between;}
+        .state-box {height: .373333rem;line-height: .373333rem;font-size: .373333rem;color: #333;}
+        .money-box {height: .373333rem;line-height: .373333rem;font-size: .373333rem;color: #FF4B4B;}
+        .num-box {margin-top: .4rem;height: .373333rem;line-height: .373333rem;font-size: .373333rem;color: #333;}
+        .time {height: .613333rem;display: flex;justify-content: flex-end;align-items: center;font-size: .32rem;color: #999;border-bottom: 1px solid #E0E0E0;}
+        .tip {height: 1.066667rem;line-height: 1.066667rem;font-size: .32rem;color: #2E80C5;}
+        .img img {width: 100%;vertical-align: bottom;}
+        .confirm {display: block;margin-top: .533333rem;width: 100%;height: 1.173333rem;line-height: 1.173333rem;font-size: .48rem;color: #fff;text-align: center;border: none;border-radius: .266667rem;background: #2E80C5;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+        .popup-bg {position: fixed;top: 0;left: 0;z-index: 999999;width: 100%;height: 100%;background: rgba(0, 0, 0, .35);display: none;}
+        .popup-box {display: flex;justify-content: center;align-items: center;width: 100%;height: 100%;opacity: 0;transition: ease opacity .4s;}
+        .popup-content {width: 72.3%;border-radius: .4rem;background: rgba(255, 255, 255, .98);overflow: hidden;transform: scale(1.2);transition: ease transform .4s;}
+        .popup-top {padding: .533333rem;border-bottom: 1px solid #E0E0E0;}
+        .question {height: 1.6rem;display: flex;justify-content: center;align-items: center;font-size: .48rem;color: #333;}
+        .popup-tip {margin-top: .08rem;font-size: .346667rem;color: #666;text-align: center;}
+        .popup-btn {display: flex;justify-content: space-between;width: 100%;}
+        .popup-btn button {width: 50%;height: 1.2rem;line-height: 1.2rem;text-align: center;font-size: .48rem;color: #2E80C5;border: none;background: transparent;}
+        .popup-btn .popup-confirm {border-left: 1px solid #E0E0E0;font-weight: bold;}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>交易订单详情</span>
+    </header>
+    <main class="main">
+        <div class="content">
+            <div class="content-top">
+                <div class="state-box">订单状态：<span class="state"></span></div>
+                <div class="money-box">金额：<span class="money"></span>￥</div>
+            </div>
+            <div class="num-box">数量：<span class="num"></span>个可售资产</div>
+            <div class="time">1970-01-01 00:00:00</div>
+            <div class="tip">（注意：转账切勿填写任何备注）</div>
+            <div class="img"></div>
+            <button class="confirm">确认打款</button>
+        </div>
+    </main>
+    <div class="popup-bg">
+        <div class="popup-box">
+            <div class="popup-content">
+                <div class="popup-top">
+                    <div class="question">确认已收到打款？</div>
+                    <div class="popup-tip"></div>
+                </div>
+                <div class="popup-btn">
+                    <button class="popup-cancel">取消</button>
+                    <button class="popup-confirm">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var state = document.querySelector('.state');
+    var money = document.querySelector('.money');
+    var num = document.querySelector('.num');
+    var time = document.querySelector('.time');
+    var img = document.querySelector('.img');
+    var confirm = document.querySelector('.confirm');
+    var popupBg = document.querySelector('.popup-bg');
+    var popupBox = document.querySelector('.popup-box');
+    var popupContent = document.querySelector('.popup-content');
+    var popupCancel = document.querySelector('.popup-cancel');
+    var popupConfirm = document.querySelector('.popup-confirm');
+    // 获取url中的参数
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);return null;
+    }
+    var urlParameter = GetQueryString("order_id");
+    $.ajax({
+        url: j_url + "/index/shop/marketInfo",
+        type: "POST",
+        data: {
+            market_id: urlParameter
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                var status = void 0;
+                switch (info.status) {
+                    case 1:
+                        status = '等待匹配';
+                        break;
+                    case 2:
+                        status = '等待付款';
+                        break;
+                    case 3:
+                        status = '等待收款';
+                        break;
+                    case 4:
+                        status = '交易完成';
+                        break;
+                }
+                state.innerHTML = status;
+                money.innerHTML = Number(info.total);
+                num.innerHTML = Number(info.num);
+                time.innerHTML = info.matching_time;
+                img.innerHTML = '<img src="' + info.zfb_img + '"/>';
+            };
+        }
+    });
+    confirm.addEventListener('click', function () {
+        popupBg.style.display = 'block';
+        setTimeout(function () {
+            popupBox.style.opacity = '1';
+            popupContent.style.transform = 'scale(1)';
+        }, 10);
+    });
+    popupCancel.addEventListener('click', function () {
+        popupBox.style.opacity = '0';
+        setTimeout(function () {
+            popupBg.style.display = 'none';
+            popupContent.style.transform = 'scale(1.2)';
+            document.location.reload();
+        }, 400);
+    });
+    popupConfirm.addEventListener('click', function () {
+        $.ajax({
+            url: j_url + "/index/shop/endMarket",
+            type: "POST",
+            data: {
+                market_id: urlParameter
+            },
+            dataType: "json",
+            async: true,
+            crossDomain: true,
+            success: function success(res) {
+                console.log(res);
+                if (res.code == 0) {
+                    layer.open({
+                        content: res.message,
+                        skin: 'msg',
+                        time: 2
+                    });
+                    setTimeout(function () {
+                        window.location.href = 'javascript:history.back(-1)';
+                    }, 1500);
+                } else {
+                    layer.open({
+                        content: res.message,
+                        skin: 'msg',
+                        time: 2
+                    });
+                };
+            }
+        });
+    });
+</script>
+</html>

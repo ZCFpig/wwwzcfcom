@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>农场详情</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;top: 0;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {position: absolute;top: 0;left: 0;padding: 1.28rem .373333rem 0rem;width: 100%;}
+        .title {margin-top: .293333rem;font-size: .426667rem;color: #fff;font-weight: bold;}
+        .run-box {padding: 2.373333rem 0rem;}
+        .run-content {display: flex;justify-content: center;align-items: center;margin: 0 auto;width: 4.746667rem;height: 4.746667rem;background: url(../static/images/yuan_icon@2x.png) no-repeat 0 0 / 100% 100%;}
+        .run {display: flex;justify-content: center;align-items: center;width: 1.973333rem;height: 1.973333rem;font-size: .426667rem;color: #fff;font-weight: bold;border-radius: 50%;background: rgba(26, 128, 197, .7);}
+        .num {height: 1.066667rem;line-height: 1.066667rem;font-size: .826667rem;color: #fff;font-weight: bold;}
+        .can-get-box, .already-get-box, .already-run-box, .state {height: .826667rem;line-height: .826667rem;font-size: .426667rem;color: #fff;}
+        .state {font-weight: bold;}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>农场详情</span>
+    </header>
+    <main class="main">
+        <div class="title">我的：<span class="machine-type">微型云农场（0.00）</span></div>
+        <div class="run-box">
+            <div class="run-content">
+                <div class="run">运行中</div>
+            </div>
+        </div>
+        <div class="num">0.000</div>
+        <div class="can-get-box">可领取：<span class="can-get">0</span></div>
+        <div class="already-get-box">已领取：<span class="already-get">0.0000</span></div>
+        <div class="already-run-box">已运行：<span class="already-run">0</span>小时</div>
+        <!-- <div class="state">未满24小时，不可领取</div> -->
+    </main>
+    <canvas id="canvas"></canvas>
+</body>
+<script>
+    var machineType = document.querySelector('.machine-type');
+    var num = document.querySelector('.num');
+    var canGet = document.querySelector('.can-get');
+    var alreadyGet = document.querySelector('.already-get');
+    var alreadyRun = document.querySelector('.already-run');
+    // 获取url中的参数
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r !=null ) return unescape(r[2]); return null;
+    }
+    var urlParameter = GetQueryString("id");
+    $.ajax({
+        url: j_url + "/index/mywallet/machineInfo",
+        type: "POST",
+        data: {
+            id: urlParameter
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                var level;
+                switch (info.level) {
+                    case 1:
+                        level = '小型农场';
+                        break;
+                    case 2:
+                        level = '中型农场';
+                        break;
+                    case 3:
+                        level = '大型农场';
+                        break;
+                    case 4:
+                        level = '超级农场';
+                        break;
+                }
+                machineType.innerHTML = level;
+                num.innerHTML = info.total_num;
+                canGet.innerHTML = info.can_get_num;
+                alreadyGet.innerHTML = info.get_num;
+                alreadyRun.innerHTML = info.use_time;
+                setInterval(function() {
+                    num.innerHTML = Number(num.innerHTML) + Number(info.miao_get);
+                }, 1000)
+            };
+        }
+    });
+</script>
+<script>
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    var drop = [];
+    var font_size = 16;
+    var columns = canvas.width / font_size;
+    for(var i = 0; i < columns; i++) {
+        drop[i] = 1;
+    }
+
+    function drawcanvas(){
+        context.fillStyle = "rgba(0, 0, 0, 0.1)";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = "green";
+        context.font = font_size + "px";
+        for(var i = 0; i < columns; i++){
+            context.fillText(Math.floor(Math.random() * 2), i * font_size, drop[i] * font_size);
+            if (drop[i] * font_size > (canvas.height * 2 / 3) && Math.random() > 0.85) {
+                drop[i] = 0;
+            }
+            drop[i]++;
+        }
+    }
+    setInterval(drawcanvas, 40);
+</script>
+</html>

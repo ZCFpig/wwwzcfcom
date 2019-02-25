@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的订单</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/swiper.min.css">
+    <link rel="stylesheet" href="../static/iconfont/iconfont.css">
+    <script src="../static/js/swiper.min.js"></script>
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;z-index: 99999;width: 100%;}
+        .head {display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #2E80C5;}
+        .head span {font-size: .48rem;color: #fff;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .nav-box {display: flex;justify-content: space-between;padding: 0rem .32rem;background: #fff;border-bottom: 1px solid #F5F5F5;}
+        .nav-box .nav-item {height: 1.2rem;display: flex;align-items: center;font-size: .373333rem;color: #333;border-bottom: 1px solid transparent;}
+        .nav-box .nav-active {border-color: #2E80C5;color: #2E80C5;}
+        .main {padding-top: 2.48rem;}
+        .item {margin-bottom: .32rem;background: #fff;}
+        .item-top {display: flex;justify-content: space-between;align-items: center;padding: 0rem .32rem;height: 1.2rem;border-bottom: 1px solid #F5F5F5;font-size: .373333rem;color: #333;}
+        .order-danger {color: #f00;}
+        .order-success {color: #62c979;}
+        .order-data {display: flex;justify-content: space-between;padding: .32rem;}
+        .data-left {display: flex;justify-content: flex-start;}
+        .goods-name, .total {padding-left: .133333rem;font-size: .373333rem;color: #333;}
+        .goods-price, .buy-num {font-size: .373333rem;color: #333;text-align: right;}
+        .total, .buy-num {margin-top: .24rem;color: #999;}
+        .goods-img img {width: 1.866667rem;height: 1.866667rem;}
+        .btn-box {display: flex;justify-content: flex-end;padding: 0rem .32rem .32rem;}
+        .confirm {padding: 0rem .533333rem;height: .96rem;line-height: .96rem;border: none;border-radius: .48rem;background: #2E80C5;font-size: .373333rem;color: #fff;}
+        .sell-popup-bg {position: fixed;top: 0;left: 0;z-index: 999999;width: 100%;height: 100%;background: rgba(0, 0, 0, .35);display: none;}
+        .sell-popup-box {position: absolute;top: -100%;left: 0;display: flex;justify-content: center;align-items: center;width: 100%;height: 100%;transition: ease top .4s;}
+        .sell-popup-content {width: 72.3%;border-radius: .4rem;background: rgba(255, 255, 255, .98);overflow: hidden;}
+        .sell-popup-top {padding: .8rem;border-bottom: 1px solid #E0E0E0;}
+        .sell-question {font-size: .48rem;color: #333;text-align: center;}
+        .sell-popup-tip {margin-top: .08rem;font-size: .346667rem;color: #666;text-align: center;}
+        .sell-popup-btn {display: flex;justify-content: space-between;width: 100%;}
+        .sell-popup-btn button {width: 50%;height: 1.2rem;line-height: 1.2rem;text-align: center;font-size: .48rem;color: #2E80C5;border: none;background: transparent;}
+        .sell-popup-btn .sell-popup-confirm {border-left: 1px solid #E0E0E0;font-weight: bold;}
+    </style>
+<body>
+    <header class="header">
+        <div class="head">
+            <a href="shopping_mall.html" class="go-back">
+                <img src="../static/images/nav_arrow_White_icon@2x.png" alt="">
+            </a>
+            <span>我的订单</span>
+        </div>
+        <nav class="nav-box">
+            <div class="nav-item nav-active" data="1">全部订单</div>
+            <div class="nav-item" data="0">待发货</div>
+            <div class="nav-item" data="0">待收货</div>
+            <div class="nav-item" data="0">已完成</div>
+        </nav>
+    </header>
+    <main class="main">
+        <div class="list">
+            <!-- <div class="item">
+                <div class="item-top">
+                    <div class="order-num-box">
+                        <span>订单号：</span>
+                        <span id="order-num">2019012410017150252148</span>
+                    </div>
+                    <div class="order-static order-danger">已发货</div>
+                </div>
+                <div class="order-data">
+                    <div class="data-left">
+                        <div class="goods-img">
+                            <img src="../static/images/background_img@2x.png" alt="">
+                        </div>
+                        <div>
+                            <div class="goods-name">中航净水器</div>
+                            <div class="total">总计：3333.33ZCF</div>
+                        </div>
+                    </div>
+                    <div class="data-right">
+                        <div class="goods-price">333.33ZCF</div>
+                        <div class="buy-num">×1</div>
+                    </div>
+                </div>
+                <div class="btn-box">
+                    <button class="confirm">确认收货</button>
+                </div>
+            </div> -->
+        </div>
+    </main>
+    <div class="sell-popup-bg">
+        <div class="sell-popup-box">
+            <div class="sell-popup-content">
+                <div class="sell-popup-top">
+                    <div class="sell-question">确认已收货？</div>
+                    <div class="sell-popup-tip"></div>
+                </div>
+                <div class="sell-popup-btn">
+                    <button class="sell-popup-cancel">取消</button>
+                    <button class="sell-popup-confirm">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var list = document.querySelector('.list');
+    var navItem = document.querySelectorAll('.nav-item');
+    var navItemLen = navItem.length;
+    var sellPopupBg = document.querySelector('.sell-popup-bg');
+    var sellPopupBox = document.querySelector('.sell-popup-box');
+    var sellPopupTip = document.querySelector('.sell-popup-tip');
+    var sellPopupCancel = document.querySelector('.sell-popup-cancel');
+    var sellPopupConfirm = document.querySelector('.sell-popup-confirm');
+    var page = 1;
+    var limit = 10;
+    var status = 0;
+    function determine() {
+        var confirm = document.querySelectorAll('.confirm');
+        confirm.forEach(function (item) {
+            item.addEventListener('click', function () {
+                sellPopupConfirm.setAttribute('data', item.getAttribute('data'));
+                sellPopupBg.style.display = 'block';
+                setTimeout(function () {
+                    sellPopupBox.style.top = '0%';
+                }, 10);
+            });
+        });
+    }
+    sellPopupConfirm.addEventListener('click', function () {
+        $.ajax({
+            url: j_url + "/index/shop/chilkOrder",
+            type: "POST",
+            data: { order_id: sellPopupConfirm.getAttribute('data') },
+            dataType: "json",
+            async: true,
+            crossDomain: true,
+            success: function success(res) {
+                console.log(res);
+                if (res.code == 0) {
+                    layer.open({
+                        content: res.message,
+                        skin: 'msg',
+                        time: 2
+                    });
+                    sellPopupConfirm.setAttribute('disabled', 'disabled');
+                    setTimeout(function () {
+                        document.location.reload();
+                    }, 1500);
+                } else {
+                    layer.open({
+                        content: res.message,
+                        skin: 'msg',
+                        time: 2
+                    });
+                };
+            }
+        });
+    });
+    sellPopupCancel.addEventListener('click', function () {
+        sellPopupBox.style.top = '-100%';
+        setTimeout(function () {
+            sellPopupBg.style.display = 'none';
+        }, 400);
+    });
+    $.ajax({
+        url: j_url + "/index/shop/orderList",
+        type: "POST",
+        data: {
+            page: page,
+            limit: limit,
+            status: status
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                list.innerHTML = '';
+                info.forEach(function (item) {
+                    var status = void 0;
+                    switch (item.status) {
+                        case 1:
+                            status = '待发货';
+                            break;
+                        case 2:
+                            status = '已发货';
+                            break;
+                        case 3:
+                            status = '已收货';
+                            break;
+                    }
+                    if (item.status == 3) {
+                        list.innerHTML += '<div class="item" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="item-top"><div class="order-num-box"><span>\u8BA2\u5355\u53F7\uFF1A</span><span class="order-num">' + item.order_number + '</span></div><div class="order-static order-success">' + status + '</div></div><div class="order-data"><div class="data-left"><div class="goods-img"><img src="..' + item.img + '" alt=""></div><div><div class="goods-name">' + item.goods_title + '</div><div class="total">\u603B\u8BA1\uFF1A' + item.pay_money + 'ZCF</div></div></div><div class="data-right"><div class="goods-price">' + item.price + 'ZCF</div><div class="buy-num">\xD7' + item.pay_num + '</div></div></div></div>';
+                    } else {
+                        list.innerHTML += '<div class="item"><div class="item-top" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="order-num-box"><span>\u8BA2\u5355\u53F7\uFF1A</span><span class="order-num">' + item.order_number + '</span></div><div class="order-static order-danger">' + status + '</div></div><div class="order-data" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="data-left"><div class="goods-img"><img src="..' + item.img + '" alt=""></div><div><div class="goods-name">' + item.goods_title + '</div><div class="total">\u603B\u8BA1\uFF1A' + item.pay_money + 'ZCF</div></div></div><div class="data-right"><div class="goods-price">' + item.price + 'ZCF</div><div class="buy-num">\xD7' + item.pay_num + '</div></div></div><div class="btn-box"><button class="confirm" data="' + item.id + '">\u786E\u8BA4\u6536\u8D27</button></div></div>';
+                    };
+                });
+                determine();
+            };
+        }
+    });
+    for (var i = 0; i < navItemLen; i++) {
+        (function (i) {
+            navItem[i].addEventListener('click', function () {
+                if (navItem[i].getAttribute('data') == '0') {
+                    for (var j = 0; j < navItemLen; j++) {
+                        navItem[j].classList.remove('nav-active');
+                        navItem[j].setAttribute('data', '0');
+                    }
+                    navItem[i].classList.add('nav-active');
+                    navItem[i].setAttribute('data', '1');
+                    status = i;
+                    page = 1;
+                    $.ajax({
+                        url: j_url + "/index/shop/orderList",
+                        type: "POST",
+                        data: {
+                            page: page,
+                            limit: limit,
+                            status: status
+                        },
+                        dataType: "json",
+                        async: true,
+                        crossDomain: true,
+                        success: function success(res) {
+                            console.log(res);
+                            if (res.code == 0 && res.info) {
+                                var info = res.info;
+                                list.innerHTML = '';
+                                info.forEach(function (item) {
+                                    var status = void 0;
+                                    switch (item.status) {
+                                        case 1:
+                                            status = '待发货';
+                                            break;
+                                        case 2:
+                                            status = '已发货';
+                                            break;
+                                        case 3:
+                                            status = '已收货';
+                                            break;
+                                    }
+                                    if (item.status == 3) {
+                                        list.innerHTML += '<div class="item" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="item-top"><div class="order-num-box"><span>\u8BA2\u5355\u53F7\uFF1A</span><span class="order-num">' + item.order_number + '</span></div><div class="order-static order-success">' + status + '</div></div><div class="order-data"><div class="data-left"><div class="goods-img"><img src="..' + item.img + '" alt=""></div><div><div class="goods-name">' + item.goods_title + '</div><div class="total">\u603B\u8BA1\uFF1A' + item.pay_money + 'ZCF</div></div></div><div class="data-right"><div class="goods-price">' + item.price + 'ZCF</div><div class="buy-num">\xD7' + item.pay_num + '</div></div></div></div>';
+                                    } else {
+                                        list.innerHTML += '<div class="item"><div class="item-top" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="order-num-box"><span>\u8BA2\u5355\u53F7\uFF1A</span><span class="order-num">' + item.order_number + '</span></div><div class="order-static order-danger">' + status + '</div></div><div class="order-data" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="data-left"><div class="goods-img"><img src="..' + item.img + '" alt=""></div><div><div class="goods-name">' + item.goods_title + '</div><div class="total">\u603B\u8BA1\uFF1A' + item.pay_money + 'ZCF</div></div></div><div class="data-right"><div class="goods-price">' + item.price + 'ZCF</div><div class="buy-num">\xD7' + item.pay_num + '</div></div></div><div class="btn-box"><button class="confirm" data="' + item.id + '">\u786E\u8BA4\u6536\u8D27</button></div></div>';
+                                    };
+                                });
+                                determine();
+                            };
+                        }
+                    });
+                }
+            });
+        })(i);
+    }
+    /*navItem.forEach(function (item, index) {
+        item.addEventListener('click', function () {
+            if (item.getAttribute('data') == '0') {
+                navItem.forEach(function (ele) {
+                    ele.classList.remove('nav-active');
+                    ele.setAttribute('data', '0');
+                });
+                item.classList.add('nav-active');
+                item.setAttribute('data', '1');
+                status = index;
+                page = 1;
+                $.ajax({
+                    url: j_url + "/index/shop/orderList",
+                    type: "POST",
+                    data: {
+                        page: page,
+                        limit: limit,
+                        status: status
+                    },
+                    dataType: "json",
+                    async: true,
+                    crossDomain: true,
+                    success: function success(res) {
+                        console.log(res);
+                        if (res.code == 0 && res.info) {
+                            var info = res.info;
+                            list.innerHTML = '';
+                            info.forEach(function (item) {
+                                var status = void 0;
+                                switch (item.status) {
+                                    case 1:
+                                        status = '待发货';
+                                        break;
+                                    case 2:
+                                        status = '已发货';
+                                        break;
+                                    case 3:
+                                        status = '已收货';
+                                        break;
+                                }
+                                if (item.status == 3) {
+                                    list.innerHTML += '<div class="item" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="item-top"><div class="order-num-box"><span>\u8BA2\u5355\u53F7\uFF1A</span><span class="order-num">' + item.order_number + '</span></div><div class="order-static order-success">' + status + '</div></div><div class="order-data"><div class="data-left"><div class="goods-img"><img src="..' + item.img + '" alt=""></div><div><div class="goods-name">' + item.goods_title + '</div><div class="total">\u603B\u8BA1\uFF1A' + item.pay_money + 'ZCF</div></div></div><div class="data-right"><div class="goods-price">' + item.price + 'ZCF</div><div class="buy-num">\xD7' + item.pay_num + '</div></div></div></div>';
+                                } else {
+                                    list.innerHTML += '<div class="item"><div class="item-top" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="order-num-box"><span>\u8BA2\u5355\u53F7\uFF1A</span><span class="order-num">' + item.order_number + '</span></div><div class="order-static order-danger">' + status + '</div></div><div class="order-data" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="data-left"><div class="goods-img"><img src="..' + item.img + '" alt=""></div><div><div class="goods-name">' + item.goods_title + '</div><div class="total">\u603B\u8BA1\uFF1A' + item.pay_money + 'ZCF</div></div></div><div class="data-right"><div class="goods-price">' + item.price + 'ZCF</div><div class="buy-num">\xD7' + item.pay_num + '</div></div></div><div class="btn-box"><button class="confirm" data="' + item.id + '">\u786E\u8BA4\u6536\u8D27</button></div></div>';
+                                };
+                            });
+                            determine();
+                        };
+                    }
+                });
+            }
+        });
+    });*/
+    // 上拉加载
+    $(document).scroll(function () {
+        var srollPos = $(document).scrollTop(); // 滚动条距顶部距离(页面超出窗口的高度)
+        totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+        if ($(document).height() <= totalheight) {
+            page++;
+            $.ajax({
+                url: j_url + "/index/shop/orderList",
+                type: "POST",
+                data: {
+                    page: page,
+                    limit: limit,
+                    status: status
+                },
+                dataType: "json",
+                async: true,
+                crossDomain: true,
+                success: function success(res) {
+                    console.log(res);
+                    if (res.code == 0 && res.info) {
+                        var info = res.info;
+                        info.forEach(function (item) {
+                            var status = void 0;
+                            switch (item.status) {
+                                case 1:
+                                    status = '待发货';
+                                    break;
+                                case 2:
+                                    status = '已发货';
+                                    break;
+                                case 3:
+                                    status = '已收货';
+                                    break;
+                            }
+                            if (item.status == 3) {
+                                list.innerHTML += '<div class="item" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="item-top"><div class="order-num-box"><span>\u8BA2\u5355\u53F7\uFF1A</span><span class="order-num">' + item.order_number + '</span></div><div class="order-static order-success">' + status + '</div></div><div class="order-data"><div class="data-left"><div class="goods-img"><img src="..' + item.img + '" alt=""></div><div><div class="goods-name">' + item.goods_title + '</div><div class="total">\u603B\u8BA1\uFF1A' + item.pay_money + 'ZCF</div></div></div><div class="data-right"><div class="goods-price">' + item.price + 'ZCF</div><div class="buy-num">\xD7' + item.pay_num + '</div></div></div></div>';
+                            } else {
+                                list.innerHTML += '<div class="item"><div class="item-top" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="order-num-box"><span>\u8BA2\u5355\u53F7\uFF1A</span><span class="order-num">' + item.order_number + '</span></div><div class="order-static order-danger">' + status + '</div></div><div class="order-data" onclick="window.location.href=\'goods_order_details.html?goods_id=' + item.id + '\'"><div class="data-left"><div class="goods-img"><img src="..' + item.img + '" alt=""></div><div><div class="goods-name">' + item.goods_title + '</div><div class="total">\u603B\u8BA1\uFF1A' + item.pay_money + 'ZCF</div></div></div><div class="data-right"><div class="goods-price">' + item.price + 'ZCF</div><div class="buy-num">\xD7' + item.pay_num + '</div></div></div><div class="btn-box"><button class="confirm" data="' + item.id + '">\u786E\u8BA4\u6536\u8D27</button></div></div>';
+                            };
+                        });
+                        determine();
+                    };
+                }
+            });
+        }
+    });
+</script>
+</html>

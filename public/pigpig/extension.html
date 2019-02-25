@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>二维码推广</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/qrcode.min.js" ></script>
+    <script src="../static/js/clipboard.min.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html {min-height: 100%;background: #f5f5f5;}
+        body {background: url(../static/images/Promotion_bj_img@2x.png) no-repeat;background-size: 100%;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #2E80C5;z-index: 99999;}
+        .header span {font-size: .48rem;color: #fff;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem 0rem .8rem;}
+        .content {display: flex;justify-content: center;align-items: center;margin: 0 auto;margin-top: 4rem;padding: .666667rem .666667rem 0rem;width: 8.186667rem;background: #fff;border-radius: .266667rem;box-shadow: 0rem 0rem .666667rem 0rem rgba(204, 204, 204, 0.35);}
+        .tip {display: flex;justify-content: center;align-items: center;height: 1.066667rem;font-size: .48rem;color: #2E80C5;text-align: center;font-weight: bold;}
+        .address-box {margin: 0 auto;margin-top: .533333rem;width: 8.186667rem;}
+        #address {display: block;padding: .24rem .4rem;width: 100%;height: .906667rem;line-height: .426667rem;font-size: .32rem;color: #2E80C5;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;border: none;}
+        .copy-btn {display: block;margin-top: .533333rem;width: 100%;height: 1.173333rem;line-height: 1.173333rem;font-size: .48rem;color: #fff;text-align: center;border: none;border-radius: .266667rem;background: #2E80C5;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_White_icon@2x.png" alt="">
+        </a>
+        <span>二维码推广</span>
+    </header>
+    <main class="main">
+        <div class="content">
+            <div>
+                <div id="qrcode"></div>
+                <div class="tip">我的推广二维码</div>
+            </div>
+        </div>
+        <div class="address-box">
+            <input type="text" id="address" readonly placeholder="请先登录">
+            <button class="copy-btn" style="cursor: pointer;" data-clipboard-action="copy" data-clipboard-target="#address">复制推荐链接</button>
+        </div>
+    </main>
+</body>
+<script>
+    var address = document.querySelector('#address');
+    // 复制邀请码
+    var clipboard = new ClipboardJS('.copy-btn');
+    clipboard.on('success', function (e) {
+        layer.open({
+            content: "复制成功！",
+            skin: 'msg',
+            time: 2
+        });
+    });
+    clipboard.on('error', function (e) {
+        layer.open({
+            content: "复制成功！",
+            skin: 'msg',
+            time: 2
+        });
+    });
+    $.ajax({
+        url: j_url + "/index/member/getInviteCode",
+        type: "POST",
+        data: {},
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0) {
+                var addressVal = 'http://' + window.location.host + '/pigpig/register.html?code=' + res.info;
+                address.value = addressVal;
+                var qrcode = new QRCode('qrcode', {
+                    text: addressVal,
+                    width: 257,
+                    height: 257,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            };
+        }
+    });
+</script>
+</html>

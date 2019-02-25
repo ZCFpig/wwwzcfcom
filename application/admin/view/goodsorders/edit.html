@@ -1,0 +1,125 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<script type="text/javascript" src='https://unpkg.com/wangeditor/release/wangEditor.min.js'></script>
+<section class="panel">
+    {if isset($info)}
+    <header class="panel-heading">
+        <h4>快递信息</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" method="post" onsubmit="return false" role="form">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">收件人</label>
+                <div class="col-sm-5">
+                    <input disabled="true" type="text" value="{$info->user_name}" name="nick_name" class="form-control"
+                           placeholder="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">手机号码</label>
+                <div class="col-sm-5">
+                    <input disabled="true" type="text" value="{$info->mobile}" name="mobile" class="form-control"
+                           placeholder="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">收货地址</label>
+                <div class="col-sm-5">
+                    <input disabled="true" type="text" value="{$info->address}" name="address" class="form-control"
+                           placeholder="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">快递公司</label>
+
+                <div class="col-sm-5">
+                    <select name="express" class="form-control">
+                        {foreach $cate as $key=>$item}
+                        <option  value="{$key}">{$item}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">快递单号</label>
+                <div class="col-sm-5">
+                    <input  type="text" value="" name="expressnumber" class="form-control"
+                           placeholder="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" data-url="{:url('admin/goodsorders/update',['order_number'=>$info->order_number])}"
+                            onclick="main.ajaxPosts(this)" class="btn btn-primary">确定发货
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {else /}
+    <header class="panel-heading">
+        <h4>添加商品一级分类</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" method="post" onsubmit="return false" role="form">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">分类名称</label>
+
+                <div class="col-sm-5">
+                    <input type="text" value="" name="category_title" class="form-control"
+                           placeholder="请输入分类名称">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" onclick="main.ajaxPosts(this)" data-url="{:url('admin/goodscategory/save')}"
+                            class="btn btn-primary">提交
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {/if}
+</section>
+{/block}
+
+
+{block name="footer"}
+    <script src="/admin/vendor/fuelux/radio.js"></script>
+    <script>
+        var E = window.wangEditor;
+        var editor = new E('#editor');
+        var $content = $('#content');
+        editor.customConfig.uploadFileName = 'image'
+        editor.customConfig.uploadImgServer = "{:url('upload/uploadEditor')}";
+        editor.customConfig.onchange = function (html) {
+            // 监控变化，同步更新到 textarea
+            $content.val(html)
+        };
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'foreColor',  // 文字颜色
+            'backColor',  // 背景颜色
+            'link',  // 插入链接
+            'list',  // 列表
+            'justify',  // 对齐方式
+            'quote',  // 引用
+            'image',  // 插入图片
+        ]
+        editor.create()
+
+        $(function(){
+            $(".w-e-text-container").css('height','600px')
+        })
+    </script>
+{/block}

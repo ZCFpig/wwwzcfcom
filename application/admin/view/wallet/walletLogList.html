@@ -1,0 +1,117 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<section class="panel">
+    <header class="panel-heading">
+        <h4>账变记录</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" action="">
+            <div class="form-group">
+                <div class="col-xs-2 no-pd-r">
+                    <select name="types" id="types" class="form-control">
+                        <option value="0">全部类型</option>
+                        <option {if $Request.get.types == '1'} selected {/if} value="1">猪猪钱包</option>
+                        <option {if $Request.get.types == '2'} selected {/if} value="2">猪猪资产</option>
+                        <option {if $Request.get.types == '3'} selected {/if} value="3">可售猪猪</option>
+                        <option {if $Request.get.types == '4'} selected {/if} value="4">可用额度</option>
+                    </select>
+                </div>
+                <div class="col-xs-3 no-pd-l">
+                    <input type="text" id="keyword" value="{$Request.get.keyword}" name="keyword" class="form-control" placeholder="请输入会员账号搜索">
+                </div>
+                <button type="submit" class="btn btn-color">搜索</button>
+                <!--<button type="button" class="btn btn-success" id="export">导出</button>-->
+                {if $count}
+                &nbsp;&nbsp;总量：{$count}
+                {/if}
+            </div>
+        </form>
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+            <tr>
+                <th class="text-center">id</th>
+                <th class="text-center">会员账号</th>
+                <th class="text-center">会员等级</th>
+                <th class="text-center">变化数量</th>
+                <th class="text-center">变化前</th>
+                <th class="text-center">变化后</th>
+                <th class="text-center">备注</th>
+                <th class="text-center">变化钱包</th>
+                <th class="text-center">时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if !empty($list)}
+            {foreach $list as $entity}
+            <tr>
+                <form class="form-horizontal" method="post" onsubmit="return false" role="form">
+                    <td class="text-center">{$entity->id}</td>
+                    <td class="text-center">{$entity->mobile}</td>
+                    <td class="text-center">
+                        {if $entity->level == '1'}
+                        铜牌农场主
+                        {elseif $entity->level == '2'}
+                        银牌农场主
+                        {elseif $entity->level == '3'}
+                        金牌农场主
+                        {elseif $entity->level == '4'}
+                        钻石农场主
+                        {elseif $entity->level == '0'}
+                        农场主
+                        {/if}
+                    </td>
+                    <td class="text-center">{$entity->number} </td>
+                    <td class="text-center">{$entity->old} </td>
+                    <td class="text-center">{$entity->new} </td>
+                    <td class="text-center">{$entity->remark} </td>
+                    <td class="text-center">
+                        {if $entity->types == '1'}
+                        猪猪钱包
+                        {elseif $entity->types == '2'}
+                        猪猪资产
+                        {elseif $entity->types == '3'}
+                        可售猪猪
+                        {elseif $entity->types == '4'}
+                        可售额度
+                        {/if}
+                    </td>
+                    <td class="text-center">{$entity->create_time}</td>
+                </form>
+            </tr>
+            {/foreach}
+            {else /}
+            <tr class="text-center">
+                <td colspan="7">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        <div class="page">
+            {:htmlspecialchars_decode($list->render())}
+        </div>
+    </div>
+</section>
+{/block}
+
+
+{block name="footer"}
+<form action="{:url('admin/user/exportfzBncLog')}" id="exportForm">
+    <input type="hidden" name="type" id="e_type">
+    <input type="hidden" name="keyword" id="e_keyword">
+</form>
+<script>
+    //导出会员信息
+    $("#export").click(function(){
+        var keyword = $("#keyword").val();
+        var type = $("#type").val();
+        $('#e_keyword').val(keyword);
+        $('#e_type').val(type);
+        $("#exportForm").submit();
+    })
+</script>
+{/block}

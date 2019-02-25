@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>找回登录密码</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/send_countdown.js"></script>
+    <style>
+        html, body {background: #fff;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;padding-left: .373333rem;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem .906667rem 1.333333rem;}
+        .hello {min-height: 1.546667rem;line-height: 1.546667rem;font-size: .906667rem;color: #333;font-weight: bold;}
+        .welcome {display: flex;align-items: center;height: .64rem;}
+        .welcome span {height: .426667rem;line-height: .426667rem;font-size: .373333rem;color: #666;font-weight: bold;}
+        .login {margin: 0rem .213333rem;height: .426667rem;line-height: .426667rem;font-size: .373333rem;color: #2E80C5;font-weight: bold;}
+        .welcome img {height: .373333rem;}
+        .form {margin-top: .08rem;}
+        .item {padding-top: .666667rem;}
+        .item-name {font-size: .373333rem;color: #999;height: .426667rem;display: flex;align-items: center;}
+        .item-input {min-height: 42px;border-bottom: 1px solid #D6D6D6;display: flex;justify-content: space-between;align-items: center;}
+        .item-input input {padding: .266667rem 0rem;width: 100%;height: 1.093333rem;line-height: .56rem;font-size: .426667rem;font-weight: bold;color: #333;border: none;background: transparent;}
+        .item-input #verification-code {width: 60%;}
+        .send-code {display: flex;align-items: center;flex-wrap: wrap;height: 1.093333rem;font-size: .32rem;color: #2E80C5;border: none;background: transparent;}
+        .btn-box {margin-top: 1.333333rem;}
+        .confirm {display: block;width: 100%;height: 1.173333rem;line-height: 1.173333rem;text-align: center;font-size: .48rem;color: #fff;border: none;border-radius: .266667rem;background: #2E80C5;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/log_in_shut_down_icon@2x.png" alt="">
+        </a>
+    </header>
+    <main class="main">
+        <h1 class="hello">找回登录密码</h1>
+        <div class="welcome">
+            <span>立即</span>
+            <a href="login.html" class="login">登录</a>
+            <img src="../static/images/log_in_arrow_icon@2x.png" alt="">
+        </div>
+        <div class="form">
+            <div class="item">
+                <div class="item-name">手机号码</div>
+                <div class="item-input"><input type="text" id="phone" placeholder="本人银行卡绑定的手机号"></div>
+            </div>
+            <div class="item">
+                <div class="item-name">验证码</div>
+                <div class="item-input">
+                    <input type="text" id="verification-code" placeholder="请输入短信验证码">
+                    <button class="send-code">发送验证码</button>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-name">重设密码</div>
+                <div class="item-input"><input type="password" id="login-psw" placeholder="请重新设置密码"></div>
+            </div>
+            <div class="item">
+                <div class="item-name">确认密码</div>
+                <div class="item-input"><input type="password" id="confirm-psw" placeholder="请确认新密码"></div>
+            </div>
+        </div>
+        <div class="btn-box">
+            <button class="confirm">确定</button>
+        </div>
+    </main>
+</body>
+<script>
+    var phone = document.querySelector('#phone');
+    var verificationCode = document.querySelector('#verification-code');
+    var loginPsw = document.querySelector('#login-psw');
+    var confirmPsw = document.querySelector('#confirm-psw');
+    var sendCode = document.querySelector('.send-code');
+    var confirm = document.querySelector('.confirm');
+    // 手机号正则
+    var regPhone = /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/;
+    var patternPhone = new RegExp(regPhone);
+    sendCode.addEventListener('click', function () {
+        var phoneNum = phone.value;
+        if (phoneNum === '') {
+            layer.open({
+                content: '手机号码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (!patternPhone.test(phoneNum)) {
+            layer.open({
+                content: '请输入正确的手机号码',
+                skin: 'msg',
+                time: 2
+            });
+        } else {
+            $.ajax({
+                url: j_url + "index/publics/sendChange",
+                type: "POST",
+                data: { mobile: phoneNum },
+                dataType: "json",
+                async: true,
+                crossDomain: true,
+                success: function success(res) {
+                    console.log(res);
+                }
+            });
+            var countDownNum = 60;
+            this.innerHTML = countDownNum + "S";
+            var timer = setInterval(function () {
+                countDownNum--;
+                sendCode.innerHTML = countDownNum + 'S';
+                if (countDownNum <= 0) {
+                    sendCode.removeAttribute('disabled');
+                    sendCode.innerHTML = '重新获取';
+                    countDownNum = 60;
+                    clearInterval(timer);
+                }
+            }, 1000);
+            this.setAttribute('disabled', 'disabled');
+        };
+    });
+    confirm.addEventListener('click', function () {
+        if (phone.value === '') {
+            layer.open({
+                content: '手机号码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (!patternPhone.test(phone.value)) {
+            layer.open({
+                content: '请输入正确的手机号码',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (verificationCode.value === '') {
+            layer.open({
+                content: '验证码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (loginPsw.value === '') {
+            layer.open({
+                content: '新密码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (confirmPsw.value === '') {
+            layer.open({
+                content: '确认密码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (loginPsw.value != confirmPsw.value) {
+            layer.open({
+                content: '两次密码不一致',
+                skin: 'msg',
+                time: 2
+            });
+        } else {
+            $.ajax({
+                url: j_url + "/index/publics/changeSave",
+                type: "POST",
+                data: {
+                    mobile: phone.value,
+                    code: verificationCode.value,
+                    new_pwd: loginPsw.value,
+                    confirm_pwd: confirmPsw.value
+                },
+                dataType: "json",
+                async: true,
+                crossDomain: true,
+                success: function success(res) {
+                    console.log(res);
+                    if (res.code == 0) {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                        setTimeout(function () {
+                            window.location.href = 'login.html';
+                        }, 1500);
+                    } else {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                    };
+                }
+            });
+        };
+    });
+</script>
+</html>

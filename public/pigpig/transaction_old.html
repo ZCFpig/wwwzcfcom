@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>交易</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;width: 100%;height: 1.28rem;line-height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;font-weight: bold;}
+        .main {padding: 1.28rem 0rem 1.333333rem;}
+        .nav-box {display: flex;justify-content: space-between;padding: .373333rem;}
+        .nav-item {display: flex;justify-content: center;align-items: center;flex-wrap: wrap;padding: 0rem .4rem;width: 33.33%;min-height: .906667rem;font-size: .426667rem;color: #999;border: none;border-radius: .266667rem;background: transparent;}
+        .nav-active {background: #2E80C5;color: #fff;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+        section {display: none;}
+        .section-active {display: block;}
+        .title {padding: 0rem .373333rem;display: flex;justify-content: flex-start;align-items: center;}
+        .title span {height: .533333rem;line-height: .533333rem;font-size: .426667rem;color: #333;font-weight: bold;}
+        .title-icon img {height: .533333rem;vertical-align: bottom;margin-right: .106667rem;}
+        .table-one {margin-top: .373333rem;width: 100%;}
+        .table-one thead tr:first-child th {height: 1.173333rem;text-align: center;font-size: .373333rem;color: #fff;background: #2E80C5;}
+        .table-one thead tr:first-child th:first-child {border-top-left-radius: .266667rem;}
+        .table-one thead tr:first-child th:last-child {border-top-right-radius: .266667rem;}
+        .table-one tbody tr {background: #fff;border-bottom: 1px solid #E0E0E0;}
+        .table-one tr th:first-child, .table-one tr td:first-child {padding-left: .453333rem;width: 20.8%;}
+        .table-one tr th:nth-child(2), .table-one tr td:nth-child(2) {width: 24.6%;}
+        .table-one tr th:nth-child(3), .table-one tr td:nth-child(3) {width: 31.5%;}
+        .table-one tr th:last-child, .table-one tr td:last-child {padding-right: .453333rem;width: 23.1%;}
+        .table-one tbody td {height: 1.173333rem;text-align: center;font-size: .426667rem;color: #333;}
+        .table-one .sell-btn {padding: 0rem .186667rem;height: .8rem;line-height: .8rem;text-align: center;font-size: .426667rem;color: #fff;border: none;border-radius: .266667rem;background: #2E80C5;}
+        .purchase-box {padding: .373333rem .373333rem 0rem;}
+        .purchase {padding: 0rem .533333rem;border-radius: .266667rem;background: #fff;}
+        .purchase-item {display: flex;justify-content: flex-start;align-items: center;height: 1.173333rem;}
+        .purchase-item:first-child {border-bottom: 1px solid #E0E0E0;}
+        .purchase-item-l {width: 28.7%;font-size: .426667rem;color: #333;}
+        #purchase-choice {position: relative;height: 1.146667rem;}
+        #purchase-choice .purchase-num {height: 1.146667rem;line-height: 1.146667rem;}
+        .choice-list-box {position: absolute;top: 1.173333rem;left: 50%;margin-left: -1.066667rem;width: 2.133333rem;height: 0rem;overflow: hidden;transition: ease height .4s;}
+        .choice-list {position: absolute;left: 0;bottom: 0;width: 100%;text-align: center;background: #fff;border-radius: .266667rem;border: 1px solid #E0E0E0;}
+        .choice-item {height: .96rem;line-height: .96rem;font-size: .4rem;color: #666;}
+        .purchase-item-r {display: flex;justify-content: center;align-items: center;width: 50.8%;font-size: .426667rem;color: #333;}
+        .purchase-item-r span {color: #999;}
+        .purchase-item-r img {margin-left: .133333rem;height: .533333rem;transition: ease transform .4s;}
+        .apply-btn {padding: .373333rem .533333rem .533333rem;}
+        .confirm-apply {display: block;width: 100%;height: 1.173333rem;line-height: 1.173333rem;font-size: .48rem;color: #fff;text-align: center;border: none;border-radius: .266667rem;background: #2E80C5;box-shadow: 0rem 0rem .533333rem 0rem rgba(46, 128, 197, 0.35);}
+        .table-two {margin-top: .373333rem;margin-bottom: .533333rem;width: 100%;}
+        .table-two thead tr:first-child th {height: 1.173333rem;text-align: center;font-size: .373333rem;color: #fff;background: #2E80C5;}
+        .table-two thead tr:first-child th:first-child {border-top-left-radius: .266667rem;}
+        .table-two thead tr:first-child th:last-child {border-top-right-radius: .266667rem;}
+        .table-two tbody tr {background: #fff;border-bottom: 1px solid #E0E0E0;}
+        .table-two tr th:first-child, .table-two tr td:first-child {width: 18.8%;}
+        .table-two tr th:nth-child(2), .table-two tr td:nth-child(2) {width: 9.6%}
+        .table-two tr th:nth-child(3), .table-two tr td:nth-child(3) {width: 9.7%}
+        .table-two tr th:nth-child(4), .table-two tr td:nth-child(4) {width: 17.2%}
+        .table-two tr th:nth-child(5), .table-two tr td:nth-child(5) {width: 15.2%}
+        .table-two tr th:nth-child(6), .table-two tr td:nth-child(6) {width: 13.1%}
+        .table-two tr th:last-child, .table-two tr td:last-child {width: 16.4%;}
+        .table-two tbody td {height: 1.173333rem;text-align: center;font-size: .32rem;color: #333;}
+        .table-two tbody td .purchase-time {font-size: .293333rem;color: #2E80C5;}
+        .table-two tbody td .appeal {display: inline-block;padding: 0rem .24rem;height: .64rem;line-height: .64rem;border-radius: .16rem;background: #2E80C5;color: #fff;font-size: .32rem;}
+        .buy-list {margin-top: .4rem;padding: 0rem .373333rem;}
+        .buy-item {margin-bottom: .373333rem;padding: 0rem .533333rem;border-radius: .266667rem;background: #fff;}
+        .buy-item-top {display: flex;justify-content: space-between;align-items: center;height: .746667rem;border-bottom: 1px solid #E0E0E0;}
+        .buy-state {font-size: .32rem;color: #666;}
+        .buy-remaining-time {font-size: .32rem;color: #FF4B4B;}
+        .buy-item-content {display: flex;justify-content: space-between;}
+        .buy-time {height: .746667rem;line-height: .746667rem;font-size: .32rem;color: #666;}
+        .buy-num {height: .426667rem;line-height: .426667rem;font-size: .32rem;color: #2E80C5;}
+        .buy-item-r {padding-top: .746667rem;}
+        .buy-unit-price {height: .426667rem;line-height: .426667rem;font-size: .32rem;color: #2E80C5;}
+        .buy-item-bottom {display: flex;justify-content: space-between;padding: .32rem 0rem;}
+        .buy-item-bottom > div {display: flex;justify-content: flex-start;}
+        .buy-item-bottom button, .buy-item-bottom a {padding: 0rem .266667rem;height: .64rem;line-height: .64rem;font-size: .32rem;color: #fff;text-align: center;border: none;border-radius: .266667rem;background: #2E80C5;}
+        .confirm-payment {margin-left: .266667rem;}
+        .table-three {margin-top: .373333rem;margin-bottom: .533333rem;width: 100%;}
+        .table-three thead tr:first-child th {height: 1.173333rem;text-align: center;font-size: .373333rem;color: #fff;background: #2E80C5;}
+        .table-three thead tr:first-child th:first-child {border-top-left-radius: .266667rem;}
+        .table-three thead tr:first-child th:last-child {border-top-right-radius: .266667rem;}
+        .table-three tbody tr {background: #fff;border-bottom: 1px solid #E0E0E0;}
+        .table-three tr th:first-child, .table-three tr td:first-child {width: 18.8%;}
+        .table-three tr th:nth-child(2), .table-three tr td:nth-child(2) {width: 9.6%}
+        .table-three tr th:nth-child(3), .table-three tr td:nth-child(3) {width: 9.7%}
+        .table-three tr th:nth-child(4), .table-three tr td:nth-child(4) {width: 17.2%}
+        .table-three tr th:nth-child(5), .table-three tr td:nth-child(5) {width: 15.2%}
+        .table-three tr th:nth-child(6), .table-three tr td:nth-child(6) {width: 13.1%}
+        .table-three tr th:last-child, .table-three tr td:last-child {width: 16.4%;}
+        .table-three tbody td {height: 1.173333rem;text-align: center;font-size: .32rem;color: #333;}
+        .table-three tbody td .purchase-time {font-size: .293333rem;color: #2E80C5;}
+        .sell-list {margin-top: .4rem;padding: 0rem .373333rem;}
+        .sell-item {margin-bottom: .373333rem;padding: 0rem .533333rem .32rem;border-radius: .266667rem;background: #fff;}
+        .sell-item-top {display: flex;justify-content: space-between;align-items: center;height: .746667rem;border-bottom: 1px solid #E0E0E0;}
+        .sell-state {font-size: .32rem;color: #666;}
+        .sell-remaining-time {font-size: .32rem;color: #FF4B4B;}
+        .sell-item-content {display: flex;justify-content: space-between;}
+        .sell-time {height: .746667rem;line-height: .746667rem;font-size: .32rem;color: #666;}
+        .sell-num {height: .426667rem;line-height: .426667rem;font-size: .32rem;color: #2E80C5;}
+        .sell-item-r {padding-top: .746667rem;}
+        .sell-unit-price {height: .426667rem;line-height: .426667rem;font-size: .32rem;color: #2E80C5;}
+        .sell-item-bottom {display: flex;justify-content: space-between;padding: .32rem 0rem 0rem;}
+        .sell-item-bottom {display: flex;justify-content: flex-end;}
+        .sell-item-bottom button, .sell-item-bottom a {padding: 0rem .266667rem;height: .64rem;line-height: .64rem;font-size: .32rem;color: #fff;text-align: center;border: none;border-radius: .266667rem;background: #2E80C5;}
+        .confirm-payment-btn {margin-left: .266667rem;}
+        .footer {position: fixed;bottom: 0;left: 0;display: flex;justify-content: space-between;padding-top: .16rem;width: 100%;height: 1.333333rem;background: #fff;border-top: 1px solid #E0E0E0;}
+        .footer-nav {width: 20%;display: flex;justify-content: center;}
+        .footer-icon {text-align: center;}
+        .footer-icon img {height: .533333rem;vertical-align: bottom;}
+        .footer-name {padding-top: .08rem;font-size: .32rem;color: #39B7FF;text-align: center;}
+        .footer-active .footer-name {color: #2E80C5;}
+        .apply-popup-bg {position: fixed;top: 0;left: 0;z-index: 999999;width: 100%;height: 100%;background: rgba(0, 0, 0, .35);display: none;}
+        .apply-popup-box {display: flex;justify-content: center;align-items: center;width: 100%;height: 100%;opacity: 0;transition: ease opacity .4s;}
+        .apply-popup-content {width: 72.3%;border-radius: .4rem;background: rgba(255, 255, 255, .98);overflow: hidden;transform: scale(1.2);transition: ease transform .4s;}
+        .apply-popup-tip {height: 2.56rem;display: flex;justify-content: center;align-items: center;font-size: .48rem;color: #333;border-bottom: 1px solid #E0E0E0;}
+        .apply-popup-btn {display: block;width: 100%;height: 1.2rem;line-height: 1.2rem;text-align: center;font-size: .48rem;color: #2E80C5;border: none;background: transparent;}
+        .sell-popup-bg {position: fixed;top: 0;left: 0;z-index: 999999;width: 100%;height: 100%;background: rgba(0, 0, 0, .35);display: none;}
+        .sell-popup-box {position: absolute;top: -100%;left: 0;display: flex;justify-content: center;align-items: center;width: 100%;height: 100%;transition: ease top .4s;}
+        .sell-popup-content {width: 72.3%;border-radius: .4rem;background: rgba(255, 255, 255, .98);overflow: hidden;}
+        .sell-popup-top {padding: .533333rem;border-bottom: 1px solid #E0E0E0;}
+        .sell-question {font-size: .48rem;color: #333;text-align: center;font-weight: bold;}
+        .sell-popup-tip {margin-top: .08rem;font-size: .346667rem;color: #666;text-align: center;}
+        .sell-popup-btn {display: flex;justify-content: space-between;width: 100%;}
+        .sell-popup-btn button {width: 50%;height: 1.2rem;line-height: 1.2rem;text-align: center;font-size: .48rem;color: #2E80C5;border: none;background: transparent;}
+        .sell-popup-btn .sell-popup-confirm {border-left: 1px solid #E0E0E0;font-weight: bold;}
+        .psw-box {position: absolute;top: -100%;left: 0;display: flex;justify-content: center;align-items: center;width: 100%;height: 100%;transition: ease top .4s;}
+        .psw-content {width: 72.3%;border-radius: .4rem;background: rgba(255, 255, 255, .98);overflow: hidden;}
+        .psw-top {padding: .533333rem;}
+        .psw-tip {font-size: .426667rem;color: #333;font-weight: bold;text-align: center;}
+        .psw-tip-blue {margin-top: .08rem;font-size: .346667rem;color: #2E80C5;text-align: center;}
+        .psw-input {padding: .4rem .4rem .32rem;border-bottom: 1px solid #E0E0E0;}
+        .psw-input-item > input {width: 100%;height: .8rem;padding-left: .133333rem;border: 1px solid #BFBFBF;}
+        .psw-input-item:first-child > input {border-bottom: none;}
+        #second_psw {border-bottom: none;}
+        .psw-btn {display: flex;justify-content: space-between;width: 100%;}
+        .psw-btn button {width: 50%;height: 1.2rem;line-height: 1.2rem;text-align: center;font-size: .48rem;color: #2E80C5;border: none;background: transparent;}
+        .psw-btn .psw-confirm {border-left: 1px solid #E0E0E0;font-weight: bold;}
+    </style>
+<body>
+    <header class="header">
+        <span>交易</span>
+    </header>
+    <main class="main">
+        <nav class="nav-box">
+            <button class="nav-item nav-active">交易大厅</button>
+            <button class="nav-item">买入ZCF</button>
+            <button class="nav-item">卖出ZCF</button>
+        </nav>
+        <section class="section-one section-active">
+            <div class="title">
+                <span class="title-icon"><img src="../static/images/home_title_icon@2x.png" alt=""></span>
+                <span>交易大厅-等待买入列表</span>
+            </div>
+            <table class="table-one">
+                <thead>
+                    <tr>
+                        <th>数量</th>
+                        <th>单价/美元</th>
+                        <th>合计金额/美元</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody class="tbody-one">
+                    <!-- <tr>
+                        <td>3</td>
+                        <td>2.72$</td>
+                        <td>8.16$</td>
+                        <td><button class="sell-btn">卖给TA</button></td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </section>
+        <section class="section-two">
+            <div class="title">
+                <span class="title-icon"><img src="../static/images/home_title_icon@2x.png" alt=""></span>
+                <span>申请买入</span>
+            </div>
+            <div class="purchase-box">
+                <div class="purchase">
+                    <div class="purchase-item">
+                        <div class="purchase-item-l">申请数量</div>
+                        <div class="purchase-item-r" id="purchase-choice">
+                            <span class="purchase-num" data="0">请选择数量</span>
+                            <img src="../static/images/arrow_under_icon@2x.png" alt="" class="select-icon">
+                            <div class="choice-list-box">
+                                <div class="choice-list">
+                                    <div class="choice-item" data="10">10</div>
+                                    <div class="choice-item" data="20">20</div>
+                                    <div class="choice-item" data="50">50</div>
+                                    <div class="choice-item" data="100">100</div>
+                                    <div class="choice-item" data="150">150</div>
+                                    <div class="choice-item" data="300">300</div>
+                                    <div class="choice-item" data="600">600</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="purchase-item">
+                        <div class="purchase-item-l">单价</div>
+                        <div class="purchase-item-r" id="unit-price"></div>
+                    </div>
+                </div>
+                <div class="apply-btn">
+                    <button class="confirm-apply">确认申请</button>
+                </div>
+            </div>
+            <div class="title">
+                <span class="title-icon"><img src="../static/images/home_title_icon@2x.png" alt=""></span>
+                <span>我的买入列表</span>
+            </div>
+            <table class="table-two">
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>数量</th>
+                        <th>单价</th>
+                        <th>合计金额</th>
+                        <th>状态</th>
+                        <th>交易</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody class="tbody-two">
+                    <!-- <tr>
+                        <td><span class="purchase-time">2018.07.03</span></td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>已配对</td>
+                        <td>未确认</td>
+                        <td>不可操作</td>
+                    </tr> -->
+                </tbody>
+            </table>
+            <div class="title">
+                <span class="title-icon"><img src="../static/images/home_title_icon@2x.png" alt=""></span>
+                <span>我的买入交易列表</span>
+            </div>
+            <div class="buy-list">
+                <!-- <div class="buy-item">
+                    <div class="buy-item-top">
+                        <div class="buy-state">等待打款</div>
+                        <div class="buy-remaining-time">打款剩余时间：2小时</div>
+                    </div>
+                    <div class="buy-item-content">
+                        <div class="buy-item-l">
+                            <div class="buy-time">2019-01-03 12：06：59</div>
+                            <div class="buy-num">数量：3</div>
+                        </div>
+                        <div class="buy-item-r">
+                            <div class="buy-unit-price">单价：2.7300$</div>
+                        </div>
+                    </div>
+                    <div class="buy-item-bottom">
+                        <div>
+                            <button class="cancel-buy-btn">取消交易</button>
+                        </div>
+                        <div>
+                            <a class="details-btn" href="order_details.html">详细信息</a>
+                            <a class="confirm-payment" href="confirm_payment.html">确认已付款</a>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+        <section class="section-three">
+            <div class="title">
+                <span class="title-icon"><img src="../static/images/home_title_icon@2x.png" alt=""></span>
+                <span>我的出售列表</span>
+            </div>
+            <table class="table-three">
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>数量</th>
+                        <th>单价</th>
+                        <th>合计金额</th>
+                        <th>状态</th>
+                        <th>交易</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody class="tbody-three">
+                    <!-- <tr>
+                        <td><span class="purchase-time">2018.07.03</span></td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>已配对</td>
+                        <td>未确认</td>
+                        <td>不可操作</td>
+                    </tr> -->
+                </tbody>
+            </table>
+            <div class="title">
+                <span class="title-icon"><img src="../static/images/home_title_icon@2x.png" alt=""></span>
+                <span>我的出售交易列表</span>
+            </div>
+            <div class="sell-list">
+                <!-- <div class="sell-item">
+                    <div class="sell-item-top">
+                        <div class="sell-state">等待打款</div>
+                        <div class="sell-remaining-time">打款剩余时间：2小时</div>
+                    </div>
+                    <div class="sell-item-content">
+                        <div class="sell-item-l">
+                            <div class="sell-time">2019-01-03 12：06：59</div>
+                            <div class="sell-num">数量：3</div>
+                        </div>
+                        <div class="sell-item-r">
+                            <div class="sell-unit-price">单价：2.7300$</div>
+                        </div>
+                    </div>
+                    <div class="sell-item-bottom">
+                        <a class="details-btn" href="order_details.html">详细信息</a>
+                        <a class="confirm-payment-btn" href="sell_order_details.html">确认已打款</a>
+                    </div>
+                </div>
+                <div class="sell-item">
+                    <div class="sell-item-top">
+                        <div class="sell-state">等待打款</div>
+                        <div class="sell-remaining-time">打款剩余时间：2小时</div>
+                    </div>
+                    <div class="sell-item-content">
+                        <div class="sell-item-l">
+                            <div class="sell-time">2019-01-03 12：06：59</div>
+                            <div class="sell-num">数量：3</div>
+                        </div>
+                        <div class="sell-item-r">
+                            <div class="sell-unit-price">单价：2.7300$</div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="footer-nav" onclick="window.location.href='index.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_home_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">首页</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='mining_machine.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_machine_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">矿机</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='team.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_team_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">团队</div>
+            </div>
+        </div>
+        <div class="footer-nav footer-active">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_cross_Selected_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">交易</div>
+            </div>
+        </div>
+        <div class="footer-nav" onclick="window.location.href='center.html'">
+            <div>
+                <div class="footer-icon">
+                    <img src="../static/images/label_mine_default_icon@2x.png" alt="">
+                </div>
+                <div class="footer-name">我的</div>
+            </div>
+        </div>
+    </footer>
+    <div class="apply-popup-bg">
+        <div class="apply-popup-box">
+            <div class="apply-popup-content">
+                <div class="apply-popup-tip">申请成功!</div>
+                <button class="apply-popup-btn">确定</button>
+            </div>
+        </div>
+    </div>
+    <div class="sell-popup-bg">
+        <div class="sell-popup-box">
+            <div class="sell-popup-content">
+                <div class="sell-popup-top">
+                    <div class="sell-question">确认出售吗？</div>
+                    <div class="sell-popup-tip"></div>
+                </div>
+                <div class="sell-popup-btn">
+                    <button class="sell-popup-cancel">取消</button>
+                    <button class="sell-popup-confirm">确定</button>
+                </div>
+            </div>
+        </div>
+        <div class="psw-box">
+            <div class="psw-content">
+                <div class="psw-top">
+                    <div class="psw-tip">请输入二级密码与身份证号</div>
+                    <!-- <div class="psw-tip-blue">输入后重新点击 (卖给TA)</div> -->
+                </div>
+                <div class="psw-input">
+                    <div class="psw-input-item"><input type="password" id="second-psw" placeholder="二级密码"></div>
+                    <div class="psw-input-item"><input type="text" id="identity-num" placeholder="身份证号"></div>
+                </div>
+                <div class="psw-btn">
+                    <button class="psw-cancel">取消</button>
+                    <button class="psw-confirm">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var navItem = document.querySelectorAll('.nav-item');
+    var section = document.querySelectorAll('section');
+    var purchaseChoice = document.querySelector('#purchase-choice');
+    var purchaseNum = document.querySelector('.purchase-num');
+    var selectIcon = document.querySelector('.select-icon');
+    var choiceListBox = document.querySelector('.choice-list-box');
+    var choiceList = document.querySelector('.choice-list');
+    var choiceItem = document.querySelectorAll('.choice-item');
+    var unitPrice = document.querySelector('#unit-price');
+    var confirmApply = document.querySelector('.confirm-apply');
+    var applyPopupBg = document.querySelector('.apply-popup-bg');
+    var applyPopupBox = document.querySelector('.apply-popup-box');
+    var applyPopupContent = document.querySelector('.apply-popup-content');
+    var applyPopupTip = document.querySelector('.apply-popup-tip');
+    var applyPopupBtn = document.querySelector('.apply-popup-btn');
+    var sellPopupBg = document.querySelector('.sell-popup-bg');
+    var sellPopupBox = document.querySelector('.sell-popup-box');
+    var sellPopupTip = document.querySelector('.sell-popup-tip');
+    var sellPopupCancel = document.querySelector('.sell-popup-cancel');
+    var sellPopupConfirm = document.querySelector('.sell-popup-confirm');
+    var pswBox = document.querySelector('.psw-box');
+    var pswCancel = document.querySelector('.psw-cancel');
+    var pswConfirm = document.querySelector('.psw-confirm');
+    var buyList = document.querySelector('.buy-list');
+    var sellList = document.querySelector('.sell-list');
+    var tbodyOne = document.querySelector('.tbody-one');
+    var tbodyTwo = document.querySelector('.tbody-two');
+    var tbodyThree = document.querySelector('.tbody-three');
+    var secondPsw = document.querySelector('#second-psw');
+    var identityNum = document.querySelector('#identity-num');
+    var purchaseUnitPrice;
+    var hallPage = 1;
+    var purchasePage = 1;
+    var buyListPage = 1;
+    var sellPage = 1;
+    var sellListPage = 1;
+    var limit = 10;
+    // 交易大厅
+    $.ajax({
+        url: j_url + "/index/shop/marketList",
+        type: "POST",
+        data: {
+            page: hallPage,
+            limit: limit
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                info.forEach(item => {
+                    tbodyOne.innerHTML += `<tr>
+                        <td>${Number(item.num)}</td>
+                        <td>${Number(item.price)}</td>
+                        <td>${Number(item.total)}</td>
+                        <td><button class="sell-btn" data-id="${item.id}" data-num="${Number(item.num)}" data-total="${Number(item.total)}" data-service="${Number(item.ratio)}">卖给TA</button></td>
+                    </tr>`;
+                });
+                var sellBtn = document.querySelectorAll('.sell-btn');
+                sellBtn.forEach(item => {
+                    item.addEventListener('click', function() {
+                        sellPopupTip.innerHTML = item.getAttribute('data-service') == '0' ? `本次出售${item.getAttribute('data-num')}个可售资产，可收${item.getAttribute('data-total')}美元` : `本次出售${item.getAttribute('data-num')}个可售资产，可收${item.getAttribute('data-total')}美元，需要${item.getAttribute('data-service') * 100}%手续费出售10扣${10 + 10 * item.getAttribute('data-service')}`;
+                        sellPopupConfirm.setAttribute('data-id', item.getAttribute('data-id'));
+                        sellPopupBg.style.display = 'block';
+                        setTimeout(function() {
+                            sellPopupBox.style.top = '0%';
+                        }, 10);
+                    });
+                });
+            };
+        }
+    });
+    // "申请买入"单价
+    $.ajax({
+        url: j_url + "/index/mywallet/getNewHashRatio",
+        type: "POST",
+        data: {},
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                unitPrice.innerHTML = res.info.ratio;
+                purchaseUnitPrice = res.info.ratio;
+            };
+        }
+    });
+    // 我的买入列表
+    $.ajax({
+        url: j_url + "/index/shop/buyInfoList",
+        type: "POST",
+        data: {
+            page: purchasePage,
+            limit: limit
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            console.log(111)
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                info.forEach(item => {
+                    var status;
+                    var transaction;
+                    var operation;
+                    switch (item.status) {
+                        case 1:
+                            status = '等待匹配';
+                            transaction = '未确定';
+                            operation = '不可操作';
+                            break;
+                        case 2:
+                            status = '等待付款';
+                            transaction = '未确定';
+                            operation = '不可操作';
+                            break;
+                        case 3:
+                            status = '等待收款';
+                            transaction = '未确定';
+                            operation = `<a class="appeal" href="appeal.html?data-id=${item.id}">申诉</a>`;
+                            break;
+                        case 4:
+                            status = '交易完成';
+                            transaction = '完成';
+                            operation = '不可操作';
+                            break;
+                    }
+                    tbodyTwo.innerHTML += `<tr>
+                        <td><span class="purchase-time">${item.create_time.substr(0, 4)}.${item.create_time.substr(5, 2)}.${item.create_time.substr(8, 2)}</span></td>
+                        <td>${Number(item.num)}</td>
+                        <td>${Number(item.price)}</td>
+                        <td>${Number(item.total)}</td>
+                        <td>${status}</td>
+                        <td>${transaction}</td>
+                        <td>${operation}</td>
+                    </tr>`;
+                });
+            };
+        }
+    });
+    // 我的买入交易列表
+    $.ajax({
+        url: j_url + "/index/shop/buyNowInfoList",
+        type: "POST",
+        data: {
+            page: buyListPage,
+            limit: limit
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                info.forEach(item => {
+                    var status;
+                    switch (item.status) {
+                        case 1:
+                            status = '等待匹配';
+                            break;
+                        case 2:
+                            status = '等待付款';
+                            break;
+                        case 3:
+                            status = '等待收款';
+                            break;
+                        case 4:
+                            status = '交易完成';
+                            break;
+                    }
+                    buyList.innerHTML += `<div class="buy-item">
+                        <div class="buy-item-top">
+                            <div class="buy-state">${status}</div>
+                            <div class="buy-remaining-time">打款剩余时间：2小时</div>
+                        </div>
+                        <div class="buy-item-content">
+                            <div class="buy-item-l">
+                                <div class="buy-time">${item.matching_time}</div>
+                                <div class="buy-num">数量：${Number(item.num)}</div>
+                            </div>
+                            <div class="buy-item-r">
+                                <div class="buy-unit-price">单价：${Number(item.price)}$</div>
+                            </div>
+                        </div>
+                        <div class="buy-item-bottom">
+                            <div>
+                                <button class="cancel-buy-btn" data="${item.id}">取消交易</button>
+                            </div>
+                            <div>
+                                <a class="details-btn" href="order_details.html?order_id=${item.id}">详细信息</a>
+                                <a class="confirm-payment" href="confirm_payment.html?order_id=${item.id}">确认已付款</a>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+            };
+        }
+    });
+    // 我的出售列表
+    $.ajax({
+        url: j_url + "/index/shop/sellInfoList",
+        type: "POST",
+        data: {
+            page: purchasePage,
+            limit: limit
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                info.forEach(item => {
+                    var status;
+                    var transaction;
+                    switch (item.status) {
+                        case 1:
+                            status = '等待匹配';
+                            transaction = '未确定';
+                            break;
+                        case 2:
+                            status = '等待付款';
+                            transaction = '未确定';
+                            break;
+                        case 3:
+                            status = '等待收款';
+                            transaction = '未确定';
+                            break;
+                        case 4:
+                            status = '交易完成';
+                            transaction = '完成';
+                            break;
+                    }
+                    tbodyThree.innerHTML += `<tr>
+                        <td><span class="purchase-time">${item.matching_time.substr(0, 4)}.${item.matching_time.substr(5, 2)}.${item.matching_time.substr(8, 2)}</span></td>
+                        <td>${Number(item.num)}</td>
+                        <td>${Number(item.price)}</td>
+                        <td>${Number(item.total)}</td>
+                        <td>${status}</td>
+                        <td>${transaction}</td>
+                        <td>不可操作</td>
+                    </tr>`;
+                });
+            };
+        }
+    });
+    // 我的出售交易列表
+    $.ajax({
+        url: j_url + "/index/shop/sellNowInfoList",
+        type: "POST",
+        data: {
+            page: sellListPage,
+            limit: limit
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                info.forEach(item => {
+                    var status;
+                    switch (item.status) {
+                        case 1:
+                            status = '等待匹配';
+                            break;
+                        case 2:
+                            status = '等待付款';
+                            break;
+                        case 3:
+                            status = '等待收款';
+                            break;
+                        case 4:
+                            status = '交易完成';
+                            break;
+                    }
+                    sellList.innerHTML += `<div class="sell-item">
+                        <div class="sell-item-top">
+                            <div class="sell-state">${status}</div>
+                            <div class="sell-remaining-time">打款剩余时间：2小时</div>
+                        </div>
+                        <div class="sell-item-content">
+                            <div class="sell-item-l">
+                                <div class="sell-time">${item.matching_time}</div>
+                                <div class="sell-num">数量：${Number(item.num)}</div>
+                            </div>
+                            <div class="sell-item-r">
+                                <div class="sell-unit-price">单价：${Number(item.price)}$</div>
+                            </div>
+                        </div>
+                        <div class="sell-item-bottom">
+                            <a class="details-btn" href="order_details.html?order_id=${item.id}">详细信息</a>
+                            <a class="confirm-payment-btn" href="sell_order_details.html?order_id=${item.id}">确认已打款</a>
+                        </div>
+                    </div>`;
+                });
+            };
+        }
+    });
+    navItem.forEach((item, index) => {
+        item.addEventListener('click', function() {
+            navItem.forEach(itemCopy => {
+                itemCopy.classList.remove('nav-active');
+            });
+            section.forEach(sectionItem => {
+                sectionItem.classList.remove('section-active');
+            });
+            item.classList.add('nav-active');
+            section[index].classList.add('section-active');
+        });
+    });
+    purchaseChoice.addEventListener('click', function() {
+        console.log(this);
+        var choiceListHeight = choiceList.offsetHeight;
+        choiceListBox.style.height = choiceListBox.offsetHeight > 0 ? '0px' : choiceListHeight + 'px';
+        selectIcon.style.transform = choiceListBox.offsetHeight > 0 ? 'rotateZ(0deg)' : 'rotateZ(180deg)';
+    });
+    choiceItem.forEach(item => {
+        item.addEventListener('click', function() {
+            choiceListBox.style.height = '0px';
+            purchaseNum.innerHTML = item.innerHTML;
+            purchaseNum.setAttribute('data', item.getAttribute('data'));
+        });
+    });
+    confirmApply.addEventListener('click', function() {
+        var _num = Number(purchaseNum.getAttribute('data'));
+        if (_num < 1) {
+            layer.open({
+                content: '请选择申请数量',
+                skin: 'msg',
+                time: 2
+            })
+        } else {
+            $.ajax({
+                url: j_url + "/index/shop/buyNum",
+                type: "POST",
+                data: {
+                    num: _num,
+                    price: purchaseUnitPrice
+                },
+                dataType: "json",
+                async: true,
+                crossDomain: true,
+                success: function(res) {
+                    console.log(res);
+                    applyPopupTip.innerHTML = res.message;
+                    applyPopupBg.style.display = 'block';
+                    setTimeout(function() {
+                        applyPopupBox.style.opacity = '1';
+                        applyPopupContent.style.transform = 'scale(1)';
+                    }, 10);
+                }
+            });
+        }
+    });
+    applyPopupBtn.addEventListener('click', function() {
+        applyPopupBox.style.opacity = '0';
+        setTimeout(function() {
+            applyPopupBg.style.display = 'none';
+            applyPopupContent.style.transform = 'scale(1.2)';
+            document.location.reload();
+        }, 400);
+    });
+    sellPopupCancel.addEventListener('click', function() {
+        sellPopupBox.style.top = '-100%';
+        setTimeout(function() {
+            sellPopupBg.style.display = 'none';
+        }, 400);
+    });
+    sellPopupConfirm.addEventListener('click', function() {
+        sellPopupBox.style.top = '100%';
+        pswBox.style.top = '0%';
+        pswBox.setAttribute('data-id', sellPopupConfirm.getAttribute('data-id'));
+    });
+    pswCancel.addEventListener('click', function() {
+        pswBox.style.top = '-100%';
+        setTimeout(function() {
+            sellPopupBg.style.display = 'none';
+            sellPopupBox.style.top = '-100%';
+        }, 400);
+    });
+    pswConfirm.addEventListener('click', function() {
+        if (secondPsw.value == '') {
+            layer.open({
+                content: '二级密码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (identityNum.value == '') {
+            layer.open({
+                content: '身份证号不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else {
+            $.ajax({
+                url: j_url + "/index/shop/shellNum",
+                type: "POST",
+                data: {
+                    market_id: pswBox.getAttribute('data-id'),
+                    trad_password: secondPsw.value,
+                    card_id: identityNum.value
+                },
+                dataType: "json",
+                async: true,
+                crossDomain: true,
+                success: function(res) {
+                    console.log(res);
+                    if (res.code == 0) {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                        setTimeout(function() {
+                            document.location.reload();
+                        }, 1500)
+                    } else {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                    }
+                }
+            });
+        };
+    });
+</script>
+</html>

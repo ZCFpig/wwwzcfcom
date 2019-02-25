@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>财务明细</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding-top: 1.28rem;}
+        .nav-box {display: flex;justify-content: space-between;padding: .373333rem;}
+        .nav-item {display: flex;justify-content: center;align-items: center;flex-wrap: wrap;padding: 0rem .4rem;width: 33.33%;min-height: .906667rem;font-size: .426667rem;color: #999;border: none;border-radius: .266667rem;background: transparent;}
+        .nav-active {background: #2E80C5;color: #fff;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+        section {display: none;}
+        .section-active {display: block;}
+        section table {margin-top: .373333rem;width: 100%;}
+        section table thead tr:first-child th {height: 1.173333rem;text-align: center;font-size: .373333rem;color: #fff;background: #2E80C5;}
+        section table thead tr:first-child th:first-child {border-top-left-radius: .266667rem;}
+        section table thead tr:first-child th:last-child {border-top-right-radius: .266667rem;}
+        section table tbody tr {background: #fff;border-bottom: 1px solid #E0E0E0;}
+        section table tr th:first-child, section table tr td:first-child {padding-left: .32rem;width: 22.4%;}
+        section table tr th:nth-child(2), section table tr td:nth-child(2) {width: 27.6%;}
+        section table tr th:nth-child(3), section table tr td:nth-child(3) {width: 27.6%;}
+        section table tr th:last-child, section table tr td:last-child {padding-right: .32rem;width: 22.4%;}
+        section table tbody td {height: 1.173333rem;text-align: center;font-size: .32rem;color: #333;}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>财务明细</span>
+    </header>
+    <main class="main">
+        <nav class="nav-box">
+            <button class="nav-item nav-active">可售猪猪</button>
+            <button class="nav-item">猪猪钱包</button>
+            <button class="nav-item">猪猪资产</button>
+        </nav>
+        <section class="section-one section-active" data="1">
+            <table>
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>变动</th>
+                        <th>余额</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody class="tbody-one">
+                    <!-- <tr>
+                        <td>2019-01-02  13:41:59</td>
+                        <td>0.0100</td>
+                        <td>0.0100</td>
+                        <td>每日签到</td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </section>
+        <section class="section-two" data="2">
+            <table>
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>变动</th>
+                        <th>余额</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody class="tbody-two">
+                    <!-- <tr>
+                        <td>2019-01-02  13:41:59</td>
+                        <td>0.0200</td>
+                        <td>0.0200</td>
+                        <td>每日签到</td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </section>
+        <section class="section-three" data="3">
+            <table>
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>变动</th>
+                        <th>余额</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody class="tbody-three">
+                    <!-- <tr>
+                        <td>2019-01-02  13:41:59</td>
+                        <td>0.0300</td>
+                        <td>0.0300</td>
+                        <td>每日签到</td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+<script>
+    var navItem = document.querySelectorAll('.nav-item');
+    var navItemLen = navItem.length;
+    var section = document.querySelectorAll('section');
+    var sectionLen = section.length;
+    var tbodyOne = document.querySelector('.tbody-one');
+    var tbodyTwo = document.querySelector('.tbody-two');
+    var tbodyThree = document.querySelector('.tbody-three');
+    var pageOne = 1;
+    var pageTwo = 1;
+    var pageThree = 1;
+    var countOne = void 0;
+    var countTwo = void 0;
+    var countThree = void 0;
+    var limit = 15;
+    for (var i = 0; i < navItemLen; i++) {
+        (function (i) {
+            navItem[i].addEventListener('click', function () {
+                for (var j = 0; j < navItemLen; j++) {
+                    navItem[j].classList.remove('nav-active');
+                }
+                for (var j = 0; j < sectionLen; j++) {
+                    section[j].classList.remove('section-active');
+                }
+                this.classList.add('nav-active');
+                section[i].classList.add('section-active');
+            })
+        })(i);
+    }
+    // 可售猪猪
+    $.ajax({
+        url: j_url + "/index/mywallet/myWalletLog",
+        type: "POST",
+        data: {
+            page: pageOne,
+            limit: limit,
+            types: 3
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                info.forEach(function (item) {
+                    tbodyOne.innerHTML += '<tr><td>' + item.create_time + '</td><td>' + Number(item.number) + '</td><td>' + Number(item.new) + '</td><td>' + item.remark + '</td></tr>';
+                });
+                countOne = res.count;
+            }
+        }
+    });
+    // 矿池钱包
+    $.ajax({
+        url: j_url + "/index/mywallet/myWalletLog",
+        type: "POST",
+        data: {
+            page: pageTwo,
+            limit: limit,
+            types: 1
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                info.forEach(function (item) {
+                    tbodyTwo.innerHTML += '<tr><td>' + item.create_time + '</td><td>' + Number(item.number) + '</td><td>' + Number(item.new) + '</td><td>' + item.remark + '</td></tr>';
+                });
+                countTwo = res.count;
+            }
+        }
+    });
+    // 猪猪资产
+    $.ajax({
+        url: j_url + "/index/mywallet/myWalletLog",
+        type: "POST",
+        data: {
+            page: pageThree,
+            limit: limit,
+            types: 2
+        },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                info.forEach(function (item) {
+                    tbodyThree.innerHTML += '<tr><td>' + item.create_time + '</td><td>' + Number(item.number) + '</td><td>' + Number(item.new) + '</td><td>' + item.remark + '</td></tr>';
+                });
+                countThree = res.count;
+            }
+        }
+    });
+    $(document).scroll(function () {
+        var srollPos = $(document).scrollTop(); // 滚动条距顶部距离(页面超出窗口的高度)
+        totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+        if ($(document).height() <= totalheight) {
+            if (document.querySelector('.section-active').getAttribute('data') == 1 && pageOne * limit < countOne) {
+                pageOne++;
+                // 可售猪猪
+                $.ajax({
+                    url: j_url + "/index/mywallet/myWalletLog",
+                    type: "POST",
+                    data: {
+                        page: pageOne,
+                        limit: limit,
+                        types: 3
+                    },
+                    dataType: "json",
+                    async: true,
+                    crossDomain: true,
+                    success: function success(res) {
+                        console.log(res);
+                        if (res.code == 0 && res.info) {
+                            var info = res.info;
+                            info.forEach(function (item) {
+                                tbodyOne.innerHTML += '<tr><td>' + item.create_time + '</td><td>' + Number(item.number) + '</td><td>' + Number(item.new) + '</td><td>' + item.remark + '</td></tr>';
+                            });
+                        }
+                    }
+                });
+            } else if (document.querySelector('.section-active').getAttribute('data') == 2 && pageTwo * limit < countTwo) {
+                pageTwo++;
+                // 矿池钱包
+                $.ajax({
+                    url: j_url + "/index/mywallet/myWalletLog",
+                    type: "POST",
+                    data: {
+                        page: pageTwo,
+                        limit: limit,
+                        types: 1
+                    },
+                    dataType: "json",
+                    async: true,
+                    crossDomain: true,
+                    success: function success(res) {
+                        console.log(res);
+                        if (res.code == 0 && res.info) {
+                            var info = res.info;
+                            info.forEach(function (item) {
+                                tbodyTwo.innerHTML += '<tr><td>' + item.create_time + '</td><td>' + Number(item.number) + '</td><td>' + Number(item.new) + '</td><td>' + item.remark + '</td></tr>';
+                            });
+                        }
+                    }
+                });
+            } else if (document.querySelector('.section-active').getAttribute('data') == 3 && pageThree * limit < countThree) {
+                pageThree++;
+                // 猪猪资产
+                $.ajax({
+                    url: j_url + "/index/mywallet/myWalletLog",
+                    type: "POST",
+                    data: {
+                        page: pageThree,
+                        limit: limit,
+                        types: 2
+                    },
+                    dataType: "json",
+                    async: true,
+                    crossDomain: true,
+                    success: function success(res) {
+                        console.log(res);
+                        if (res.code == 0 && res.info) {
+                            var info = res.info;
+                            info.forEach(function (item) {
+                                tbodyThree.innerHTML += '<tr><td>' + item.create_time + '</td><td>' + Number(item.number) + '</td><td>' + Number(item.new) + '</td><td>' + item.remark + '</td></tr>';
+                            });
+                        }
+                    }
+                });
+            }
+        }
+    });
+</script>
+</html>

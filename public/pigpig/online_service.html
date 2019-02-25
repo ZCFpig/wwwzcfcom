@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>在线客服</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;padding-left: .373333rem;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding-top: 1.28rem;}
+        .content {margin-top: .373333rem;background: #fff;}
+        .item {display: flex;justify-content: space-between;align-items: center;padding: 0rem .4rem;height: 1.173333rem;border-bottom: 1px solid #F5F5F5;}
+        .item-left {font-size: .373333rem;color: #313131;}
+        .item-right img {height: .586667rem;vertical-align: bottom;}
+        .item-right {font-size: .373333rem;color: #E88331;}
+        .service-bg {position: fixed;top: 0;left: 0;width: 100%;height: 100%;display: none;z-index: 999999;}
+        .service-box {position: absolute;top: -100%;left: 0;width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;padding: 0rem 1.386667rem;transition: ease top .5s;}
+        .service {position: relative;width: 100%;background: #fff;border: 1px solid #ccc;border-radius: .24rem;}
+        .close-service {position: absolute;top: .266667rem;right: .266667rem;}
+        .close-service img {width: .426667rem;vertical-align: bottom;}
+        .service-title {display: flex;align-items: center;margin-top: .533333rem;margin-left: .48rem;}
+        .service-title img {width: 1.2rem;}
+        .service-title span {margin-left: .24rem;font-size: .32rem;color: #333;}
+        .service-content {display: flex;justify-content: center;margin-top: .64rem;}
+        .service-content img {width: 5.52rem;height: 5.52rem;vertical-align: bottom;}
+        .service-tip {display: flex;justify-content: center;align-items: center;padding: 0rem .4rem;height: 1.173333rem;font-size: .32rem;color: #fff;margin-top: .32rem;}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>在线客服</span>
+    </header>
+    <main class="main">
+        <div class="content">
+            <!-- <a href="javascript:;" class="item">
+                <span class="item-left">在线客服</span>
+                <span class="item-right"><img src="../static/images/ad_Customer_service_icon@2x.png" alt=""></span>
+            </a>
+            <a href="tel:400-0599-995" class="item">
+                <span class="item-left">在线客服</span>
+                <span class="item-right">400-0599-995</span>
+            </a> -->
+        </div>
+    </main>
+    <div class="service-bg">
+        <div class="service-box">
+            <div class="service">
+                <div class="service-title">
+                    <img src="../static/images/wechat_icon@2x.png" alt="">
+                    <span class="service-name"></span>
+                </div>
+                <div class="close-service"><img src="../static/images/icon_Close@2x.png" alt=""></div>
+                <div class="service-content"></div>
+                <div class="service-tip">扫码添加客服微信</div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var serviceBg = document.querySelector('.service-bg');
+    var closeService = document.querySelector('.close-service');
+    var serviceBox = document.querySelector('.service-box');
+    var serviceName = document.querySelector('.service-name');
+    var serviceContent = document.querySelector('.service-content');
+    var content = document.querySelector('.content');
+    $.ajax({
+        url: j_url + "/index/article/getServiceInfo",
+        type: "POST",
+        data: {},
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                var infoLen = info.length;
+                for (var i = 0; i < infoLen; i++) {
+                    content.innerHTML += '<span class="item" data="..'+info[i].wx+'" data-name="'+info[i].name+'"><span class="item-left">'+info[i].name+'</span><span class="item-right"><img src="../static/images/wechat_icon@2x.png" alt=""></span></span>';
+                }
+                var _item = document.getElementsByClassName('item');
+                var itemLen = _item.length;
+                for (var j = 0; j < itemLen; j++) {
+                    _item[j].addEventListener('click', function() {
+                        serviceBg.style.display = "block";
+                        serviceName.innerHTML = this.getAttribute('data-name');
+                        serviceContent.innerHTML = '<img src="'+this.getAttribute('data')+'" alt="">';
+                        setTimeout(function () {
+                            serviceBox.style.top = "0%";
+                        }, 50);
+                    });
+                }
+            };
+        }
+    });
+    closeService.addEventListener('click', function() {
+        serviceBox.style.top = "-100%";
+        setTimeout(function() {
+            serviceBg.style.display = "none";
+        }, 500);
+    });
+</script>
+</html>

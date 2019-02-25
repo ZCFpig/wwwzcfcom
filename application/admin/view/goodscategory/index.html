@@ -1,0 +1,66 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<section class="panel">
+    <header class="panel-heading">
+        <h4>商品分类</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" action="{:url('goodscategory/index')}">
+            <div class="form-group">
+
+                <!-- <button type="submit" class="btn btn-color">搜索</button> -->
+                <a type="button" href="{:url('/admin/goodscategory/create')}" class="btn btn-info">添加商品分类</a>
+            </div>
+        </form>
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">分类名</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {if !empty($lists)}
+            {foreach $lists as $entity}
+            <tr>
+                <td class="text-center">{$entity->category_id}</td>
+                <td class="text-center">{$entity->category_title}</td>
+
+                <td class="text-center">
+                    <a href="{:url('goodscategory/edit',['id'=>$entity->category_id])}" class="btn btn-xs btn-info">编辑</a>
+                    <a data-url="{:url('goodscategory/delete',['id'=>$entity->category_id])}" onclick="main.ajaxDelete(this)"
+                       data-msg="确定要删除该分类吗？" class="btn btn-xs btn-danger">删除</a>
+                </td>
+            </tr>
+            {/foreach}
+            {else /}
+            <tr class="text-center">
+                <td colspan="5">暂无数据</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+        <div class="page">
+            {:htmlspecialchars_decode($lists->render())}
+        </div>
+    </div>
+</section>
+{/block}
+
+
+{block name="footer"}
+    <script>
+        function showContent(e){
+            $.dialog({
+                title: '商品内容',
+                content: $(e).attr('data-content')
+            });
+        }
+    </script>
+{/block}

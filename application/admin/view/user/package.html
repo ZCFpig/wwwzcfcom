@@ -1,0 +1,141 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<!--<link rel="stylesheet" href="http://cdn.staticfile.org/webuploader/0.1.5/webuploader.css">-->
+<!--<script type="text/javascript" src='http://cdn.staticfile.org/webuploader/0.1.5/webuploader.min.js'></script>-->
+<style type="text/css">
+
+</style>
+
+
+<section class="panel">
+    <header class="panel-heading">
+        <h4>套餐设置</h4>
+    </header>
+    <div class="panel-body" style="padding-bottom: 50px">
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+            <tr>
+                <th class="text-center">序号</th>
+                <th class="text-center">矿机级别</th>
+                <th class="text-center">每日获得</th>
+                <th class="text-center">总产</th>
+                <th class="text-center">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $list as $key=>$config}
+            <tr>
+                <td class="text-center" style="vertical-align: middle; ">{$key+1}</td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    {if $config['level'] == 1}
+                    小猪窝
+                    {elseif $config['level'] == 2}
+                    中猪窝
+                    {elseif $config['level'] == 3}
+                    大猪窝
+                    {elseif $config['level'] == 4}
+                    超级猪窝
+                    {/if}
+                </td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text" id="_num{$config['id']}" style="text-align: center" class="form-control"
+                           value="{$config['num']}">
+                </td>
+                <td class="text-center" style="vertical-align: middle; ">
+                    <input type="text" id="_total_num{$config['id']}" style="text-align: center" class="form-control"
+                           value="{$config['total_num']}">
+                </td>
+
+                <td class="text-center" style="vertical-align: middle; ">
+                    <a onclick="updateConfigCopy(this)" data-level="{$config['level']}"  data-num="{$config['num']}"  data-total_num="{$config['total_num']}"  id-data="{$config['id']}" class="btn btn-xs btn-primary">确认修改</a>
+                </td>
+
+            </tr>
+            <!-- {/if} -->
+            {/foreach}
+            <!--<tr>-->
+                <!--<td class="text-center" style="vertical-align: middle; "></td>-->
+                <!--<td class="text-center" style="vertical-align: middle; ">-->
+                    <!--<input type="text"  style="text-align: center" id="name" class="form-control" value=""></td>-->
+                <!--<td class="text-center" style="vertical-align: middle; ">-->
+                    <!--<input type="text"  style="text-align: center" id="key" class="form-control" value=""></td>-->
+
+                <!--<td class="text-center" style="vertical-align: middle; ">-->
+                    <!--<input type="text"  style="text-align: center" id='values' class="form-control" value="">-->
+                <!--</td>-->
+                <!--<td class="text-center" style="vertical-align: middle; ">-->
+                    <!--<a onclick="addConfig(this)" class="btn btn-xs btn-primary">确认添加</a>-->
+                <!--</td>-->
+            <!--</tr>-->
+            </tbody>
+
+
+
+        </table>
+
+    </div>
+</section>
+
+
+
+
+
+{/block}
+
+{block name="footer"}
+
+<script>
+
+    function addConfig(e) {
+        var name = $('#name').val();
+        var key = $('#key').val();
+        var values = $('#values').val();
+
+
+        $.post("{:url('packageSetadd')}", {name: name,key: key, values: values}, function (data) {
+            if (data.code == 1) {
+                main.waringAlert(data.message);
+            } else {
+                main.waringAlert(data.message);
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000)
+            }
+        }, 'json')
+    }
+    function updateConfigCopy(e) {
+        var id = $(e).attr('id-data');
+
+        var level = $(e).attr('data-level');
+
+
+        var num1 = $(e).attr('data-num');
+        var num = $('#_num' +id).val();
+        var total_num1 = $(e).attr('data-total_num');
+        var total_num = $('#_total_num' +id).val();
+        $.post("{:url('packageSetsave')}", {id: id, level: level, num:num,total_num:total_num}, function (data) {
+            if (data.code == 1) {
+                main.waringAlert(data.message);
+            } else {
+                main.waringAlert(data.message);
+                window.location.reload();
+            }
+        }, 'json')
+    }
+
+
+
+
+
+
+</script>
+
+
+
+</script>
+{/block}

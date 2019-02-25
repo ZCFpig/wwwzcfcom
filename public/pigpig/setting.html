@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>设置</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;top: 0;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem .373333rem .373333rem;}
+        .nav-box {margin-top: .373333rem;}
+        .nav-item {display: flex;justify-content: space-between;align-items: center;margin-bottom: .373333rem;padding: .373333rem .48rem;border-radius: .266667rem;background: #fff;}
+        .nav-item-l {display: flex;align-items: center;}
+        .nav-item-l img {height: .586667rem;}
+        .nav-item i {display: block;}
+        .nav-name {margin-left: .293333rem;font-size: .48rem;color: #333;font-weight: bold;}
+        .more {display: flex;align-items: center;height: .533333rem;}
+        .more-icon {height: 100%;}
+        .sign-out-box {padding: .693333rem .533333rem;}
+        .sign-out {display: block;width: 100%;height: 1.173333rem;line-height: 1.173333rem;font-size: .48rem;color: #fff;text-align: center;border: none;border-radius: .266667rem;background: #65B5F9;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>设置</span>
+    </header>
+    <main class="main">
+        <nav class="nav-box">
+            <a href="personal_information.html" class="nav-item">
+                <span class="nav-item-l">
+                    <img src="../static/images/Setting_data_icon@2x.png" alt="">
+                    <i class="nav-name">个人资料</i>
+                </span>
+                <span class="more">
+                    <img src="../static/images/arrow_right_icon@2x.png" alt="" class="more-icon">
+                </span>
+            </a>
+            <a href="modify_data.html" class="nav-item">
+                <span class="nav-item-l">
+                    <img src="../static/images/Setting_Modify data_icon@2x.png" alt="">
+                    <i class="nav-name">修改资料</i>
+                </span>
+                <span class="more">
+                    <img src="../static/images/arrow_right_icon@2x.png" alt="" class="more-icon">
+                </span>
+            </a>
+            <a href="unblock.html" class="nav-item">
+                <span class="nav-item-l">
+                    <img src="../static/images/Setting_Unblock_icon@2x.png" alt="">
+                    <i class="nav-name">账户解封</i>
+                </span>
+                <span class="more">
+                    <img src="../static/images/arrow_right_icon@2x.png" alt="" class="more-icon">
+                </span>
+            </a>
+            <a href="verified.html" class="nav-item">
+                <span class="nav-item-l">
+                    <img src="../static/images/Setting_Certification_icon@2x.png" alt="">
+                    <i class="nav-name">实名认证</i>
+                </span>
+                <span class="more">
+                    <img src="../static/images/arrow_right_icon@2x.png" alt="" class="more-icon">
+                </span>
+            </a>
+            <a href="modify_psw.html" class="nav-item">
+                <span class="nav-item-l">
+                    <img src="../static/images/Setting_password_icon@2x.png" alt="">
+                    <i class="nav-name">修改密码</i>
+                </span>
+                <span class="more">
+                    <img src="../static/images/arrow_right_icon@2x.png" alt="" class="more-icon">
+                </span>
+            </a>
+            <a href="transfer.html" class="nav-item">
+                <span class="nav-item-l">
+                    <img src="../static/images/Setting_zhuang_icon@2x.png" alt="">
+                    <i class="nav-name">转币</i>
+                </span>
+                <span class="more">
+                    <img src="../static/images/arrow_right_icon@2x.png" alt="" class="more-icon">
+                </span>
+            </a>
+        </nav>
+        <div class="sign-out-box">
+            <button class="sign-out">退出登录</button>
+        </div>
+    </main>
+</body>
+<script>
+    $('.sign-out').on('click', function() {
+        $.ajax({
+            url: j_url + "/index/member/logout",
+            type: "POST",
+            data: {},
+            dataType: "json",
+            async: true,
+            crossDomain: true,
+            success: function(res) {
+                console.log(res);
+                if (res.code == 0) {
+                    layer.open({
+                        content: res.message,
+                        skin: 'msg',
+                        time: 2
+                    })
+                    setTimeout(function() {
+                        window.location.href = 'login.html';
+                    }, 1500)
+                } else {
+                    layer.open({
+                        content: res.message,
+                        skin: 'msg',
+                        time: 2
+                    })
+                }
+            }
+        });
+    })
+</script>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>商品详情</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/swiper.min.css">
+    <script src="../static/js/swiper.min.js"></script>
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem 0rem 1.493333rem;}
+        #swiper1 .swiper-slide img {width: 100%;height: 10rem;vertical-align: bottom;}
+        .swiper-num {position: absolute;bottom: .32rem;right: .32rem;z-index: 999;height: .746667rem;line-height: .746667rem;padding: 0rem .266667rem;border-radius: .106667rem;background: rgba(255,255,255,.5);font-size: .373333rem;color: #666;}
+        .goods-data {padding: .24rem 0rem;background: #fff;}
+        .goods-name {padding-left: .24rem;min-height: .64rem;line-height: .64rem;font-size: .426667rem;color: #333;}
+        .goods-price {margin-top: .08rem;padding-left: .24rem;min-height: .64rem;line-height: .64rem;font-size: .426667rem;color: #f00;}
+        .details-box {margin-top: .266667rem;background: #fff;}
+        .details-item {display: flex;justify-content: space-between;align-items: center;padding: 0rem .32rem;height: 1.2rem;border-bottom: 1px solid #F5F5F5;}
+        .details-name {display: flex;align-items: center;}
+        .details-name span {font-size: .373333rem;color: #333;}
+        .details-name span:first-child {color: #999;width: 1.12rem;}
+        .more-icon img {height: .4rem;vertical-align: bottom;}
+        .goods-describe {margin-top: .266667rem;padding: .32rem;background: #fff;}
+        .describe-title {display: flex;justify-content: center;align-items: center;height: .64rem;line-height: .64rem;font-size: .4rem;color: #333;}
+        .describe-title span {border-bottom: 2px solid #ccc;}
+        .describe-content img {width: 100%;}
+        .footer {position: fixed;left: 0;bottom: 0;z-index: 999999;display: flex;align-items: center;width: 100%;padding: 0rem .32rem;height: 1.493333rem;background: #fff;border-top: 1px solid #eee;}
+        .confirm {width: 100%;height: 1.173333rem;line-height: 1.173333rem;text-align: center;font-size: .426667rem;color: #fff;border-radius: .586667rem;border: none;background: #2E80C5;}
+        .popup {position: fixed;top: 0;left: 0;z-index: 99999;display: none;width: 100%;height: 100%;background: rgba(0, 0, 0, .3);}
+        .popup-one-content {position: absolute;left: 0;bottom: -60%;width: 100%;height: 60%;background: #fff;transition: ease bottom .4s;}
+        .close-popup, .close-popup-two {position: absolute;top: .32rem;right: .32rem;display: flex;}
+        .close-popup img, .close-popup-two img {height: .346667rem;}
+        .goods-box {display: flex;align-items: center;padding: .32rem;}
+        .goods-img img {width: 2.506667rem;height: 2.506667rem;}
+        .goods-value {padding-left: .32rem;font-size: .4rem;color: #f00;}
+        .goods-stock {padding-left: .32rem;font-size: .4rem;color: #999;}
+        .buy-num-box {padding: .32rem;display: flex;justify-content: space-between;align-items: center;border-top: 1px solid #eee;}
+        .buy-num-l {font-size: .4rem;color: #999;}
+        .buy-num-r {display: flex;justify-content: space-between;height: .8rem;border: 1px solid #bbb;border-radius: .133333rem;}
+        #buy-num {width: 1.2rem;height: .746667rem;border: none;text-align: center;font-size: .4rem}
+        .reduce {width: .746667rem;height: .746667rem;line-height: .746667rem;font-size: .48rem;color: #333;text-align: center;border-right: 1px solid #bbb;}
+        .add {width: .746667rem;height: .746667rem;line-height: .746667rem;font-size: .48rem;color: #333;text-align: center;border-left: 1px solid #bbb;}
+        .popup-two-content {position: absolute;left: 0;bottom: -60%;padding-top: .4rem;width: 100%;height: 60%;background: #fff;transition: ease bottom .4s;}
+        .popup-two-title {height: 1.2rem;line-height: 1.2rem;text-align: center;font-size: .48rem;color: #333;}
+        .buy-two-item {display: flex;align-items: center;height: 1.226667rem;border-bottom: 1px solid #eee;}
+        .buy-two-name {width: 20%;text-align: right;font-size: .373333rem;color: #999;}
+        .buy-two-value {margin-left: .8rem;font-size: .373333rem;color: #333;}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>商品详情</span>
+    </header>
+    <main class="main">
+        <div class="swiper-container" id="swiper1">
+            <div class="swiper-wrapper">
+                <!-- <div class="swiper-slide">
+                    <img src="../static/images/background_img@2x.png" alt="">
+                </div> -->
+            </div>
+            <div class="swiper-num"><span id="swiper-tips">1</span> / <span id="swiper-total">1</span></div>
+        </div>
+        <div class="goods-data">
+            <div class="goods-name"></div>
+            <div class="goods-price">ZCF</div>
+        </div>
+        <div class="details-box">
+            <div class="details-item" id="specification">
+                <div class="details-name">
+                    <span>规格</span>
+                    <span>请选择规格数量</span>
+                </div>
+                <div class="more-icon">
+                    <img src="../static/images/arrow_right_icon@2x.png" alt="">
+                </div>
+            </div>
+            <div class="details-item" id="parameter">
+                <div class="details-name">
+                    <span>参数</span>
+                    <span>品牌/尺寸/净含量</span>
+                </div>
+                <div class="more-icon">
+                    <img src="../static/images/arrow_right_icon@2x.png" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="goods-describe">
+            <div class="describe-title"><span>商品描述</span></div>
+            <div class="describe-content"></div>
+        </div>
+    </main>
+    <footer class="footer">
+        <button class="confirm">立即购买</button>
+    </footer>
+    <div class="popup popup-one">
+        <div class="popup-one-content">
+            <div class="close-popup">
+                <img src="../static/images/x@2x.png" alt="">
+            </div>
+            <div class="goods-box">
+                <div class="goods-img"></div>
+                <div>
+                    <div class="goods-value">ZCF</div>
+                    <div class="goods-stock">库存：件</div>
+                </div>
+            </div>
+            <div class="buy-num-box">
+                <div class="buy-num-l">购买数量</div>
+                <div class="buy-num-r">
+                    <div class="reduce">-</div>
+                    <div class="buy-num"><input type="number" id="buy-num" value="1"></div>
+                    <div class="add">+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popup popup-two">
+        <div class="popup-two-content">
+            <div class="close-popup-two">
+                <img src="../static/images/x@2x.png" alt="">
+            </div>
+            <div class="popup-two-title">产品参数</div>
+            <div class="buy-two-box">
+                <div class="buy-two-item">
+                    <div class="buy-two-name">品牌</div>
+                    <div class="buy-two-value" id="brand"></div>
+                </div>
+                <div class="buy-two-item">
+                    <div class="buy-two-name">尺寸</div>
+                    <div class="buy-two-value" id="size"></div>
+                </div>
+                <div class="buy-two-item">
+                    <div class="buy-two-name">净含量</div>
+                    <div class="buy-two-value" id="weight"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    /*let swiperWrapper = document.querySelector('#swiper1 .swiper-wrapper');
+    let swiperTips = document.querySelector('#swiper-tips');
+    let swiperTotal = document.querySelector('#swiper-total');
+    let goodsName = document.querySelector('.goods-name');
+    let goodsPrice = document.querySelector('.goods-price');
+    let goodsValue = document.querySelector('.goods-value');
+    let goodsStock = document.querySelector('.goods-stock');
+    let specification = document.querySelector('#specification');
+    let describeContent = document.querySelector('.describe-content');
+    let confirm = document.querySelector('.confirm');
+    let popupOne = document.querySelector('.popup-one');
+    let popupOneContent = document.querySelector('.popup-one-content');
+    let closePopup = document.querySelector('.close-popup');
+    let reduce = document.querySelector('.reduce');
+    let add = document.querySelector('.add');
+    let buyNum = document.querySelector('#buy-num');
+    let popupTwo = document.querySelector('.popup-two');
+    let popupTwoContent = document.querySelector('.popup-two-content');
+    let goodsImg = document.querySelector('.goods-img');
+    let closePopupTwo = document.querySelector('.close-popup-two');
+    let parameter = document.querySelector('#parameter');
+    let brand = document.querySelector('#brand');
+    let size = document.querySelector('#size');
+    let weight = document.querySelector('#weight');
+    let inventory; //库存量
+    let unitPrice; //商品单价
+    // 获取url中的参数
+    function GetQueryString(name) {
+        let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        let r = window.location.search.substr(1).match(reg);
+        if (r !=null ) return unescape(r[2]); return null;
+    }
+    let urlParameter = GetQueryString("goods_id");
+    $.ajax({
+        url: j_url + "/index/shop/detail",
+        type: "POST",
+        data: {goods_id: urlParameter},
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                let info = res.info;
+                goodsName.innerHTML = info.goods_title;
+                goodsPrice.innerHTML = goodsValue.innerHTML = info.goods_prices + 'ZCF';
+                unitPrice = info.goods_prices;
+                goodsStock.innerHTML = `库存：${info.goods_num}件`;
+                inventory = info.goods_num;
+                brand.innerHTML = info.goods_brand;
+                size.innerHTML = info.goods_size;
+                weight.innerHTML = info.goods_weight;
+                describeContent.innerHTML = info.goods_content;
+            }
+            if (res.code == 0 && res.img) {
+                let img = res.img;
+                img.forEach(item => {
+                    swiperWrapper.innerHTML += `<div class="swiper-slide">
+                        <img src="..${item}" alt="">
+                    </div>`;
+                });
+                goodsImg.innerHTML = `<img src="..${img[0]}" alt="">`;
+                swiperTotal.innerHTML = img.length;
+                let swiper1 = new Swiper('#swiper1', {
+                    on: {
+                        slideChangeTransitionStart: function() {
+                            swiperTips.innerHTML = this.activeIndex + 1;
+                        },
+                    },
+                });
+            }
+        }
+    });
+    specification.addEventListener('click', ()=> {
+        popupOne.style.display = 'block';
+        setTimeout(()=> {
+            popupOneContent.style.bottom = '0%';
+        }, 10);
+    });
+    closePopup.addEventListener('click', ()=> {
+        popupOneContent.style.bottom = '-60%';
+        setTimeout(()=> {
+            popupOne.style.display = 'none';
+        }, 400);
+    });
+    add.addEventListener('click', ()=> {
+        buyNum.value = Number(buyNum.value) + 1;
+        goodsValue.innerHTML = unitPrice * buyNum.value + 'ZCF';
+    });
+    reduce.addEventListener('click', ()=> {
+        buyNum.value = Number(buyNum.value) - 1 >= 1 ? Number(buyNum.value) - 1 : 1;
+        goodsValue.innerHTML = unitPrice * buyNum.value + 'ZCF';
+    });
+    buyNum.addEventListener('blur', ()=> {
+        buyNum.value = buyNum.value > 1 ? Math.round(Number(buyNum.value)) : 1;
+        goodsValue.innerHTML = unitPrice * buyNum.value + 'ZCF';
+    });
+    parameter.addEventListener('click', ()=> {
+        popupTwo.style.display = 'block';
+        setTimeout(()=> {
+            popupTwoContent.style.bottom = '0%';
+        }, 10);
+    });
+    closePopupTwo.addEventListener('click', ()=> {
+        popupTwoContent.style.bottom = '-60%';
+        setTimeout(()=> {
+            popupTwo.style.display = 'none';
+        }, 400);
+    });
+    confirm.addEventListener('click', ()=> {
+        if (!urlParameter) {
+            layer.open({
+                content: '参数错误',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (buyNum.value > inventory) {
+            layer.open({
+                content: '购买数量不能大于库存数量',
+                skin: 'msg',
+                time: 2
+            });
+        } else {
+            window.location.href = 'confirm_order.html?goods_id=' + urlParameter + '&buy_num=' + buyNum.value;
+        }
+    });*/
+    'use strict';
+    var swiperWrapper = document.querySelector('#swiper1 .swiper-wrapper');
+    var swiperTips = document.querySelector('#swiper-tips');
+    var swiperTotal = document.querySelector('#swiper-total');
+    var goodsName = document.querySelector('.goods-name');
+    var goodsPrice = document.querySelector('.goods-price');
+    var goodsValue = document.querySelector('.goods-value');
+    var goodsStock = document.querySelector('.goods-stock');
+    var specification = document.querySelector('#specification');
+    var describeContent = document.querySelector('.describe-content');
+    var confirm = document.querySelector('.confirm');
+    var popupOne = document.querySelector('.popup-one');
+    var popupOneContent = document.querySelector('.popup-one-content');
+    var closePopup = document.querySelector('.close-popup');
+    var reduce = document.querySelector('.reduce');
+    var add = document.querySelector('.add');
+    var buyNum = document.querySelector('#buy-num');
+    var popupTwo = document.querySelector('.popup-two');
+    var popupTwoContent = document.querySelector('.popup-two-content');
+    var goodsImg = document.querySelector('.goods-img');
+    var closePopupTwo = document.querySelector('.close-popup-two');
+    var parameter = document.querySelector('#parameter');
+    var brand = document.querySelector('#brand');
+    var size = document.querySelector('#size');
+    var weight = document.querySelector('#weight');
+    var inventory = void 0; //库存量
+    var unitPrice = void 0; //商品单价
+    // 获取url中的参数
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);return null;
+    }
+    var urlParameter = GetQueryString("goods_id");
+    $.ajax({
+        url: j_url + "/index/shop/detail",
+        type: "POST",
+        data: { goods_id: urlParameter },
+        dataType: "json",
+        async: true,
+        crossDomain: true,
+        success: function success(res) {
+            console.log(res);
+            if (res.code == 0 && res.info) {
+                var info = res.info;
+                goodsName.innerHTML = info.goods_title;
+                goodsPrice.innerHTML = goodsValue.innerHTML = info.goods_prices + 'ZCF';
+                unitPrice = info.goods_prices;
+                goodsStock.innerHTML = '库存：' + info.goods_num + '件';
+                inventory = info.goods_num;
+                brand.innerHTML = info.goods_brand;
+                size.innerHTML = info.goods_size;
+                weight.innerHTML = info.goods_weight;
+                describeContent.innerHTML = info.goods_content;
+            }
+            if (res.code == 0 && res.img) {
+                var img = res.img;
+                img.forEach(function (item) {
+                    swiperWrapper.innerHTML += '<div class="swiper-slide"><img src="..' + item + '" alt=""></div>';
+                });
+                goodsImg.innerHTML = '<img src="..' + img[0] + '" alt="">';
+                swiperTotal.innerHTML = img.length;
+                var swiper1 = new Swiper('#swiper1', {
+                    on: {
+                        slideChangeTransitionStart: function slideChangeTransitionStart() {
+                            swiperTips.innerHTML = this.activeIndex + 1;
+                        }
+                    }
+                });
+            }
+        }
+    });
+    specification.addEventListener('click', function () {
+        popupOne.style.display = 'block';
+        setTimeout(function () {
+            popupOneContent.style.bottom = '0%';
+        }, 10);
+    });
+    closePopup.addEventListener('click', function () {
+        popupOneContent.style.bottom = '-60%';
+        setTimeout(function () {
+            popupOne.style.display = 'none';
+        }, 400);
+    });
+    add.addEventListener('click', function () {
+        buyNum.value = Number(buyNum.value) + 1;
+        goodsValue.innerHTML = unitPrice * buyNum.value + 'ZCF';
+    });
+    reduce.addEventListener('click', function () {
+        buyNum.value = Number(buyNum.value) - 1 >= 1 ? Number(buyNum.value) - 1 : 1;
+        goodsValue.innerHTML = unitPrice * buyNum.value + 'ZCF';
+    });
+    buyNum.addEventListener('blur', function () {
+        buyNum.value = buyNum.value > 1 ? Math.round(Number(buyNum.value)) : 1;
+        goodsValue.innerHTML = unitPrice * buyNum.value + 'ZCF';
+    });
+    parameter.addEventListener('click', function () {
+        popupTwo.style.display = 'block';
+        setTimeout(function () {
+            popupTwoContent.style.bottom = '0%';
+        }, 10);
+    });
+    closePopupTwo.addEventListener('click', function () {
+        popupTwoContent.style.bottom = '-60%';
+        setTimeout(function () {
+            popupTwo.style.display = 'none';
+        }, 400);
+    });
+    confirm.addEventListener('click', function () {
+        if (!urlParameter) {
+            layer.open({
+                content: '参数错误',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (buyNum.value > inventory) {
+            layer.open({
+                content: '购买数量不能大于库存数量',
+                skin: 'msg',
+                time: 2
+            });
+        } else {
+            window.location.href = 'confirm_order.html?goods_id=' + urlParameter + '&buy_num=' + buyNum.value;
+        }
+    });
+</script>
+</html>

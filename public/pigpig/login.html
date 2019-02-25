@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <style>
+        html, body {background: #fff;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;padding-left: .373333rem;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem .906667rem 1.333333rem;}
+        .hello {height: 1.546667rem;line-height: 1.546667rem;font-size: .906667rem;color: #333;font-weight: bold;}
+        .welcome {display: flex;align-items: center;height: .64rem;}
+        .welcome span {height: .426667rem;line-height: .426667rem;font-size: .373333rem;color: #666;font-weight: bold;}
+        .register {margin: 0rem .213333rem;height: .426667rem;line-height: .426667rem;font-size: .373333rem;color: #2E80C5;font-weight: bold;}
+        .welcome img {height: .373333rem;}
+        .form {margin-top: .08rem;}
+        .item {padding-top: .666667rem;}
+        .item-name {font-size: .373333rem;color: #999;height: .426667rem;display: flex;align-items: center;}
+        .item-input {min-height: 42px;border-bottom: 1px solid #D6D6D6;display: flex;justify-content: space-between;align-items: center;}
+        .item-input input {padding: .266667rem 0rem;width: 100%;height: 1.093333rem;line-height: .56rem;font-size: .426667rem;font-weight: bold;color: #333;border: none;background: transparent;}
+        .item:last-child input {width: 50%;}
+        .btn-box {margin-top: 1.333333rem;}
+        .confirm {display: block;width: 100%;height: 1.173333rem;line-height: 1.173333rem;text-align: center;font-size: .48rem;color: #fff;border: none;border-radius: .266667rem;background: #2E80C5;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+        .link-box {display: flex;justify-content: space-between;align-items: center;height: 1.013333rem;}
+        .link-item {font-size: .346667rem;color: #999;}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/log_in_shut_down_icon@2x.png" alt="">
+        </a>
+    </header>
+    <main class="main">
+        <h1 class="hello">您好</h1>
+        <div class="welcome">
+            <span>欢迎来到猪猪财富，立即</span>
+            <a href="register.html" class="register">注册</a>
+            <img src="../static/images/log_in_arrow_icon@2x.png" alt="">
+        </div>
+        <div class="form">
+            <div class="item">
+                <div class="item-name">手机号码</div>
+                <div class="item-input"><input type="text" id="phone" placeholder="请输入手机号码"></div>
+            </div>
+            <div class="item">
+                <div class="item-name">密码</div>
+                <div class="item-input"><input type="password" id="login-psw" placeholder="请输入密码"></div>
+            </div>
+            <div class="item">
+                <div class="item-name">验证码</div>
+                <div class="item-input">
+                    <input type="text" id="verification-code" placeholder="请输入验证码">
+                    <canvas id="canvas" width="106" height="41"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="btn-box">
+            <button class="confirm">登录</button>
+        </div>
+        <div class="link-box">
+            <a href="register.html" class="link-item">注册新用户</a>
+            <a href="retrieve_psw.html" class="link-item">忘记密码</a>
+        </div>
+    </main>
+</body>
+<script>
+    var code;
+    /**生成一个随机数**/
+    function randomNum(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    };
+    drawPic();
+    $('#canvas').on('click', function(e){
+        e.preventDefault();
+        drawPic();
+    })
+    /**绘制验证码图片**/
+    function drawPic() {
+        code = ''; //首先默认code为空字符串
+        var canvas = document.getElementById("canvas");
+        var width = canvas.width;
+        var height = canvas.height;
+        var ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'bottom';
+        /**绘制背景色**/
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, width, height);
+        /**绘制文字**/
+        var str = '0123456789';
+        for (var i = 0; i < 6; i++) {
+            var txt = str[randomNum(0, str.length)];
+            ctx.fillStyle = "#0007F6"; // 字体颜色
+            ctx.font = 'bold 28px MicrosoftYaHei'; // 字体大小
+            var x = 3 + i * 17;
+            var y = randomNum(35, 40);
+            var deg = randomNum(-10, 10);
+            //修改坐标原点
+            ctx.translate(x, y);
+            ctx.rotate(deg * Math.PI/180);
+            ctx.fillText(txt, 0, 0);
+            //恢复坐标原点和旋转角度
+			ctx.rotate(-deg * Math.PI/180);
+			ctx.translate(-x, -y);
+			code = code + txt;
+        };
+    };
+</script>
+<script>
+    var regPhone = /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/;
+    var patternPhone = new RegExp(regPhone);
+
+    $('.confirm').on('click', function(){
+        var phoneNum = $('#phone').val();
+        var loginPsw = $('#login-psw').val();
+        var verificationCode = $('#verification-code').val();
+        if (phoneNum === '') {
+            layer.open({
+                content: '手机号码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (!patternPhone.test(phoneNum)) {
+            layer.open({
+                content: '请输入正确的手机号码',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (loginPsw === '') {
+            layer.open({
+                content: '密码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (verificationCode === '') {
+            layer.open({
+                content: '验证码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (verificationCode !== code) {
+            layer.open({
+                content: '请输入正确的验证码',
+                skin: 'msg',
+                time: 2
+            });
+        } else {
+            $.ajax({
+                url: 'http://' + window.location.host + '/index.php/index/publics/login',
+                type: 'POST',
+                data: {
+                    account: phoneNum,
+                    password: loginPsw,
+                },
+                dataType: 'json',
+                async: true,
+                crossDomain: true,
+                success: function(res) {
+                    console.log(res);
+                    if (res.code == 0) {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                        setTimeout(function(){
+                            window.location.href = 'index.html'
+                        }, 1500);
+                    } else {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                        drawPic();
+                    }
+                },
+                error: function(XHR, textStatus, errorThrown) {
+                    layer.open({
+                        content: '网络错误！',
+                        skin: 'msg',
+                        time: 2
+                    });
+                }
+            });
+        };
+    });
+</script>
+</html>

@@ -1,0 +1,104 @@
+{extend name="layout/main" /}
+
+{block name="header"}
+
+{/block}
+
+{block name="content"}
+<style>
+    .listli{
+           background-color: #fff;
+    }
+    .select {
+        color: #ffffff;
+        background-color: #1ec3c8;
+        border-color: #1ec3c8;
+    }
+    .select:hover{
+        color: #fff;
+    }
+</style>
+
+<section class="panel">
+    <header class="panel-heading">
+        <h4>静态返记录</h4>
+    </header>
+
+    <div class="panel-body" style="padding-bottom: 50px">
+        <form class="form-horizontal" action="{:url('admin/legal/sale')}" >
+            <div class="form-group">
+                
+                
+                <div class="col-xs-1 no-pd-r">
+                    <select name="type" class="form-control">
+                        <option {if $Request.get.type == 'mobile'} selected {/if} value="mobile">会员电话</option>
+                    </select>
+                </div>
+                <div class="col-xs-3 no-pd-l">
+                    <input type="text" value="{$Request.get.keyword}" name="keyword" class="form-control" placeholder="请输入对应电话搜索">
+                </div>
+                <button type="submit" class="btn btn-color">搜索</button>
+            </div>
+        </form>
+        <table class="table table-bordered table-striped no-margin">
+            <thead>
+                <tr>
+                    <th class="text-center">ID编号</th>
+                    <th class="text-center">用户信息</th>
+                    <th class="text-center">返还金额</th>
+                    <th class="text-center">返还比例</th>
+                    <th class="text-center">返前金额</th>
+                    <th class="text-center">返后金额</th>
+                    <th class="text-center">剩余返还天数</th>
+                    <th class="text-center">返还时间</th>
+                </tr>
+            </thead>
+            <tbody>
+            {if $list}
+                {foreach $list as $order}
+                    <tr>
+                        <td class="text-center">{$order->id}</td>
+                        <td class="text-center">
+                            昵称：{$order->nick_name}<br>
+                            电话：{$order->mobile}
+                        </td>
+                       
+                        <td class="text-center">
+                           {$order->returnmoney}
+                        </td>
+                        <td class="text-center">
+                            {$order->returnratio}%
+                        </td>
+                        <td class="text-center">
+                           {$order->qian}
+                        </td>
+                        <td class="text-center">
+                           {$order->hou}
+                        </td>
+                         <td class="text-center">
+                           {$order->surplusday}
+                        </td>
+                        <td class="text-center">
+                            {:date('Y-m-d H:i:s',$order->createtime)}
+                        </td>
+                        
+                    </tr>
+                {/foreach}
+            {else /}
+                <tr class="text-center">
+                    <td colspan="8">暂无数据</td>
+                </tr>
+            {/if}
+            </tbody>
+        </table>
+        <div class="page">
+            {:htmlspecialchars_decode($list->render())}
+        </div>
+    </div>
+</section>
+{/block}
+
+
+{block name="footer"}
+
+{/block}

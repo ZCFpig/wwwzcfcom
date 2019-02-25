@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>转币</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/build/flexible.js"></script>
+    <script src="../static/build/flexible_css.js"></script>
+    <script src="../static/js/layer.js"></script>
+    <script src="../static/js/url.js"></script>
+    <script src="../static/js/verify_login.js"></script>
+    <style>
+        html, body {background: #F5F5F5;}
+        blockquote, span, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, td, textarea, label, th, ul, ol, i {padding: 0px;margin: 0px;font-family: MicrosoftYaHei;}
+        li {list-style: none;}
+        label, i {margin: 0;font-style: normal;font-weight: normal;}
+        input::-webkit-input-placeholder {color: #999;}
+        textarea::-webkit-input-placeholder {color: #999;}
+        .header {position: fixed;top: 0px;left: 0px;display: flex;align-items: center;justify-content: center;width: 100%;height: 1.28rem;text-align: center;color: #333;background: #fff;z-index: 99999;}
+        .header span {font-size: .48rem;color: #333;font-weight: bold;}
+        .go-back {position: absolute;left: .266667rem;height: 1.28rem;display: flex;align-items: center;}
+        .go-back img {height: .586667rem;vertical-align: bottom;}
+        .main {padding: 1.28rem .373333rem .373333rem;}
+        .box {margin-top: .373333rem;padding: 0rem .533333rem;border-radius: .266667rem;background: #fff;}
+        .item {display: flex;align-items: center;height: 1.173333rem;border-bottom: 1px solid #E0E0E0;}
+        .item:last-child {border: none;}
+        .item label {width: 40.4%;height: 1.12rem;line-height: 1.12rem;font-size: .373333rem;color: #333;}
+        .item input {width: 59.6%;height: 1.12rem;border: none;font-size: .373333rem;font-weight: bold;color: #333;}
+        .confirm-box {margin-top: 2.746667rem;padding: 0rem .533333rem;}
+        .confirm {display: block;width: 100%;height: 1.173333rem;line-height: 1.173333rem;font-size: .48rem;color: #fff;text-align: center;border: none;border-radius: .266667rem;background: #2E80C5;box-shadow: 0rem 0rem .666667rem 0rem rgba(46, 128, 197, 0.35);}
+        .popup-bg {position: fixed;top: 0;left: 0;z-index: 999999;width: 100%;height: 100%;background: rgba(27, 27, 27, .4);display: none;}
+        .popup-box {position: absolute;top: -100%;left: 0;display: flex;justify-content: center;align-items: center;padding: 0% 13.5%;width: 100%;height: 100%;transition: ease top .4s;}
+        .popup-content {width: 100%;border-radius: .267777rem;background: #fff;}
+        .popup-title {height: 2.56rem;display: flex;justify-content: center;align-items: center;font-size: .48rem;color: #333;font-weight: bold;}
+        .popup-input {padding: 0rem .48rem;}
+        #trad_password {width: 100%;padding-left: .08rem;height: .853333rem;border: 1px solid #8E8E8E;font-size: .373333rem;color: #333;}
+        #trad_password::-webkit-input-placeholder {color: #ccc;}
+        .popup-btn {display: flex;justify-content: center;margin-top: .266667rem;border-top: 1px solid #E9EAEA;}
+        .popup-btn button {width: 50%;height: 1.173333rem;line-height: 1.173333rem;border: none;background: transparent;font-size: .426667rem;color: #1886FE;text-align: center;}
+        .popup-btn .confirm-transfer {border-left: 1px solid #E9EAEA;font-weight: bold;}
+    </style>
+<body>
+    <header class="header">
+        <a href="javascript:history.back(-1)" class="go-back">
+            <img src="../static/images/nav_arrow_icon@2x.png" alt="">
+        </a>
+        <span>转币</span>
+    </header>
+    <main class="main">
+        <div class="box">
+            <div class="item">
+                <label for="receiver">接收人</label>
+                <input type="text" id="receiver" placeholder="请输入对方钱包地址">
+            </div>
+            <div class="item">
+                <label for="num">数量</label>
+                <input type="number" id="num" placeholder="请输入转出数量">
+            </div>
+        </div>
+        <div class="confirm-box">
+            <button class="confirm">提交</button>
+        </div>
+    </main>
+    <div class="popup-bg">
+        <div class="popup-box">
+            <div class="popup-content">
+                <div class="popup-title">输入二级密码</div>
+                <div class="popup-input"><input type="password" id="trad_password" placeholder="请输入二级密码"></div>
+                <div class="popup-btn">
+                    <button class="cancel-transfer">取消</button>
+                    <button class="confirm-transfer">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var confirm = document.querySelector('.confirm');
+    var receiver = document.querySelector('#receiver');
+    var num = document.querySelector('#num');
+    var tradPassword = document.querySelector('#trad_password');
+    var cancelTransfer = document.querySelector('.cancel-transfer');
+    var confirmTransfer = document.querySelector('.confirm-transfer');
+    var popupBg = document.querySelector('.popup-bg');
+    var popupBox = document.querySelector('.popup-box');
+    confirm.addEventListener('click', function () {
+        if (receiver.value == '') {
+            layer.open({
+                content: '接收人钱包地址不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else if (num.value == '') {
+            layer.open({
+                content: '转出数量不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else {
+            popupBg.style.display = 'block';
+            setTimeout(function () {
+                popupBox.style.top = '0%';
+            }, 10);
+        };
+    });
+    cancelTransfer.addEventListener('click', function () {
+        popupBox.style.top = '-100%';
+        setTimeout(function () {
+            popupBg.style.display = 'none';
+        }, 400);
+    });
+    confirmTransfer.addEventListener('click', function () {
+        if (tradPassword.value == '') {
+            layer.open({
+                content: '二级密码不能为空',
+                skin: 'msg',
+                time: 2
+            });
+        } else {
+            $.ajax({
+                url: j_url + "/index/mywallet/UserToUser",
+                type: "POST",
+                data: {
+                    mobile: receiver.value,
+                    num: num.value,
+                    trad_password: tradPassword.value
+                },
+                dataType: "json",
+                async: true,
+                crossDomain: true,
+                success: function success(res) {
+                    console.log(res);
+                    if (res.code == 0) {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                        confirmTransfer.setAttribute('disabled', 'disabled');
+                        setTimeout(function () {
+                            document.location.reload();
+                        }, 1500);
+                    } else {
+                        layer.open({
+                            content: res.message,
+                            skin: 'msg',
+                            time: 2
+                        });
+                    };
+                }
+            });
+        }
+    });
+</script>
+</html>
