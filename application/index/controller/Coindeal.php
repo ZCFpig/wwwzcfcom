@@ -64,7 +64,7 @@ class Coindeal extends Base {
                 $data['dayrate'] = '-'.$dayrate;
             }
 
-            //查看当前卖的
+            //查看当前卖的1
             $selflist = Coindeals::where([
                 ['isshow','=',0],
                 ['types','=',2],
